@@ -124246,6 +124246,12 @@
       "language": "PHP",
       "package": "openhandle/sdk",
       "repository": "https://github.com/openhandlehq/openhandle-php"
+    },
+    {
+      "documentation": "https://openhandle.dev/docs/sdks",
+      "language": "Rust",
+      "package": "openhandle",
+      "repository": "https://github.com/openhandlehq/openhandle-rust"
     }
   ],
   "x-openhandle-test-data": {
