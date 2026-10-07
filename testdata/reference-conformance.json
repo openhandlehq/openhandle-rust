@@ -1,0 +1,346 @@
+{
+  "version": 1,
+  "cases": [
+    {
+      "name": "raw Instagram username",
+      "platform": "instagram",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "openai"
+      },
+      "identifier": "@openai"
+    },
+    {
+      "name": "raw leading-at Instagram username",
+      "platform": "instagram",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "@openai"
+      },
+      "identifier": "@openai"
+    },
+    {
+      "name": "raw numeric Instagram username",
+      "platform": "instagram",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "12356"
+      },
+      "identifier": "@12356"
+    },
+    {
+      "name": "raw dotted Instagram username is not a URL",
+      "platform": "instagram",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "instagram.com"
+      },
+      "identifier": "@instagram.com"
+    },
+    {
+      "name": "explicit Instagram username",
+      "platform": "instagram",
+      "resource": "profile",
+      "input": {
+        "kind": "username",
+        "value": "12356"
+      },
+      "identifier": "@12356"
+    },
+    {
+      "name": "explicit Instagram profile ID",
+      "platform": "instagram",
+      "resource": "profile",
+      "input": {
+        "kind": "id",
+        "value": "25025320"
+      },
+      "identifier": "25025320"
+    },
+    {
+      "name": "raw Instagram profile URL",
+      "platform": "instagram",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "https://www.instagram.com/openai/"
+      },
+      "identifier": "@openai"
+    },
+    {
+      "name": "raw schemeless Instagram profile URL",
+      "platform": "instagram",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "instagram.com/openai/"
+      },
+      "identifier": "@openai"
+    },
+    {
+      "name": "explicit Instagram profile URL",
+      "platform": "instagram",
+      "resource": "profile",
+      "input": {
+        "kind": "url",
+        "value": "https://www.instagram.com/openai/"
+      },
+      "identifier": "@openai"
+    },
+    {
+      "name": "raw Instagram post shorthand",
+      "platform": "instagram",
+      "resource": "post",
+      "input": {
+        "kind": "raw",
+        "value": "Db04otPRpRH"
+      },
+      "identifier": "Db04otPRpRH"
+    },
+    {
+      "name": "raw Instagram post URL",
+      "platform": "instagram",
+      "resource": "post",
+      "input": {
+        "kind": "raw",
+        "value": "instagram.com/p/Db04otPRpRH/"
+      },
+      "identifier": "Db04otPRpRH"
+    },
+    {
+      "name": "raw TikTok username",
+      "platform": "tiktok",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "openai"
+      },
+      "identifier": "@openai"
+    },
+    {
+      "name": "raw TikTok profile URL",
+      "platform": "tiktok",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "https://www.tiktok.com/@openai"
+      },
+      "identifier": "@openai"
+    },
+    {
+      "name": "raw TikTok post URL",
+      "platform": "tiktok",
+      "resource": "post",
+      "input": {
+        "kind": "raw",
+        "value": "https://www.tiktok.com/@openai/video/7520000000000000001"
+      },
+      "identifier": "7520000000000000001"
+    },
+    {
+      "name": "raw TikTok short link is rejected",
+      "platform": "tiktok",
+      "resource": "post",
+      "input": { "kind": "raw", "value": "https://www.tiktok.com/t/ZTUHFuaK6/" },
+      "error": "invalid_reference"
+    },
+    {
+      "name": "raw vm.tiktok.com short link is rejected",
+      "platform": "tiktok",
+      "resource": "post",
+      "input": { "kind": "raw", "value": "https://vm.tiktok.com/ZTUHFuaK6/" },
+      "error": "invalid_reference"
+    },
+    {
+      "name": "url TikTok short link is rejected",
+      "platform": "tiktok",
+      "resource": "post",
+      "input": { "kind": "url", "value": "vt.tiktok.com/ZTUHFuaK6" },
+      "error": "invalid_reference"
+    },
+    {
+      "name": "raw Twitter username",
+      "platform": "twitter",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "openai"
+      },
+      "identifier": "@openai"
+    },
+    {
+      "name": "raw X profile URL",
+      "platform": "twitter",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "https://x.com/openai"
+      },
+      "identifier": "@openai"
+    },
+    {
+      "name": "raw Twitter post URL",
+      "platform": "twitter",
+      "resource": "post",
+      "input": {
+        "kind": "raw",
+        "value": "https://twitter.com/openai/status/1890000000000000001"
+      },
+      "identifier": "1890000000000000001"
+    },
+    {
+      "name": "raw post URL does not fall back to profile shorthand",
+      "platform": "instagram",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "https://www.instagram.com/p/Db04otPRpRH/"
+      },
+      "error": "reference_mismatch"
+    },
+    {
+      "name": "raw URL for another platform is a mismatch",
+      "platform": "instagram",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "https://x.com/openai"
+      },
+      "error": "reference_mismatch"
+    },
+    {
+      "name": "malformed supported raw URL does not fall back",
+      "platform": "instagram",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "instagram.com/%zz"
+      },
+      "error": "invalid_reference"
+    },
+    {
+      "name": "explicit unsupported URL",
+      "platform": "instagram",
+      "resource": "profile",
+      "input": {
+        "kind": "url",
+        "value": "https://example.com/openai"
+      },
+      "error": "invalid_reference"
+    },
+    {
+      "name": "empty raw reference",
+      "platform": "instagram",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": " "
+      },
+      "error": "invalid_reference"
+    },
+    {
+      "name": "username tag is profile-only",
+      "platform": "instagram",
+      "resource": "post",
+      "input": {
+        "kind": "username",
+        "value": "openai"
+      },
+      "error": "invalid_reference"
+    },
+    {
+      "name": "Reddit hyphenated username",
+      "platform": "reddit",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "reddit-user"
+      },
+      "identifier": "@reddit-user"
+    },
+    {
+      "name": "Reddit explicit username",
+      "platform": "reddit",
+      "resource": "profile",
+      "input": {
+        "kind": "username",
+        "value": "@reddit-user"
+      },
+      "identifier": "@reddit-user"
+    },
+    {
+      "name": "Reddit profile URL",
+      "platform": "reddit",
+      "resource": "profile",
+      "input": {
+        "kind": "url",
+        "value": "https://old.reddit.com/user/reddit-user/"
+      },
+      "identifier": "@reddit-user"
+    },
+    {
+      "name": "Reddit short profile URL",
+      "platform": "reddit",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "reddit.com/u/reddit-user"
+      },
+      "identifier": "@reddit-user"
+    },
+    {
+      "name": "Reddit subreddit URL",
+      "platform": "reddit",
+      "resource": "subreddit",
+      "input": {
+        "kind": "raw",
+        "value": "https://www.reddit.com/r/python/"
+      },
+      "identifier": "python"
+    },
+    {
+      "name": "Reddit post URL",
+      "platform": "reddit",
+      "resource": "post",
+      "input": {
+        "kind": "url",
+        "value": "https://www.reddit.com/r/python/comments/abc123/a_title/"
+      },
+      "identifier": "abc123"
+    },
+    {
+      "name": "Reddit short post URL",
+      "platform": "reddit",
+      "resource": "post",
+      "input": {
+        "kind": "raw",
+        "value": "https://redd.it/abc123"
+      },
+      "identifier": "abc123"
+    },
+    {
+      "name": "Reddit nested wiki page",
+      "platform": "reddit",
+      "resource": "wikiPage",
+      "input": {
+        "kind": "raw",
+        "value": "config/sidebar"
+      },
+      "identifier": "config/sidebar"
+    },
+    {
+      "name": "Reddit profile rejects post URL",
+      "platform": "reddit",
+      "resource": "profile",
+      "input": {
+        "kind": "url",
+        "value": "https://redd.it/abc123"
+      },
+      "error": "reference_mismatch"
+    }
+  ]
+}

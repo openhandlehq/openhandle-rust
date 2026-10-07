@@ -1,0 +1,68 @@
+name: Merge Dependabot PR
+
+run-name: Merge Dependabot PR #${{ inputs.pull_request }} as openhandle-sdk-sync[bot]
+
+on:
+  workflow_dispatch:
+    inputs:
+      pull_request:
+        description: Dependabot pull request number
+        required: true
+        type: number
+
+permissions:
+  contents: read
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Create SDK merge token
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          app-id: ${{ secrets.SDK_SYNC_APP_ID }}
+          private-key: ${{ secrets.SDK_SYNC_APP_PRIVATE_KEY }}
+          owner: openhandlehq
+          repositories: openhandle-rust
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Validate Dependabot PR
+        id: pull-request
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          PR_NUMBER: ${{ inputs.pull_request }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          pr="$(gh pr view "$PR_NUMBER" --repo "$REPOSITORY" --json author,baseRefName,headRefName,headRefOid,isDraft,state,title)"
+          author="$(jq -r '.author.login' <<< "$pr")"
+
+          [[ "$author" = 'app/dependabot' || "$author" = 'dependabot[bot]' ]]
+          test "$(jq -r '.baseRefName' <<< "$pr")" = 'main'
+          [[ "$(jq -r '.headRefName' <<< "$pr")" == dependabot/* ]]
+          [[ "$(jq -r '.title' <<< "$pr")" == chore\(deps\):\ * ]]
+          test "$(jq -r '.isDraft' <<< "$pr")" = 'false'
+          test "$(jq -r '.state' <<< "$pr")" = 'OPEN'
+
+          echo "head-sha=$(jq -r '.headRefOid' <<< "$pr")" >> "$GITHUB_OUTPUT"
+
+      - name: Require successful checks
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          PR_NUMBER: ${{ inputs.pull_request }}
+          REPOSITORY: ${{ github.repository }}
+        run: gh pr checks "$PR_NUMBER" --repo "$REPOSITORY" --watch --fail-fast
+
+      - name: Merge as SDK bot
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          HEAD_SHA: ${{ steps.pull-request.outputs.head-sha }}
+          PR_NUMBER: ${{ inputs.pull_request }}
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          result="$(gh api --method PUT "repos/$REPOSITORY/pulls/$PR_NUMBER/merge" \
+            -f merge_method=merge \
+            -f sha="$HEAD_SHA")"
+          test "$(jq -r '.merged' <<< "$result")" = 'true'

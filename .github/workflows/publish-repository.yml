@@ -1,0 +1,71 @@
+name: Publish repository
+
+run-name: Publish repository as openhandle-sdk-sync[bot]
+
+on:
+    workflow_dispatch:
+        inputs:
+            confirmation:
+                description: Type openhandlehq/openhandle-rust to confirm
+                required: true
+                type: string
+
+permissions:
+    contents: read
+
+jobs:
+    publish:
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        steps:
+            - name: Validate confirmation
+              env:
+                  CONFIRMATION: ${{ inputs.confirmation }}
+                  REPOSITORY: ${{ github.repository }}
+              run: |
+                  test "$REPOSITORY" = 'openhandlehq/openhandle-rust'
+                  test "$CONFIRMATION" = "$REPOSITORY"
+
+            - name: Create SDK administration token
+              id: app-token
+              uses: actions/create-github-app-token@v3
+              with:
+                  app-id: ${{ secrets.SDK_SYNC_APP_ID }}
+                  private-key: ${{ secrets.SDK_SYNC_APP_PRIVATE_KEY }}
+                  owner: openhandlehq
+                  repositories: openhandle-rust
+                  permission-administration: write
+
+            - name: Make repository public as SDK bot
+              env:
+                  GH_TOKEN: ${{ steps.app-token.outputs.token }}
+                  REPOSITORY: ${{ github.repository }}
+              run: gh api --method PATCH "repos/$REPOSITORY" -f visibility=public
+
+            - name: Restrict main updates to SDK bot
+              env:
+                  GH_TOKEN: ${{ steps.app-token.outputs.token }}
+                  REPOSITORY: ${{ github.repository }}
+              run: |
+                  app_id="$(gh api /apps/openhandle-sdk-sync --jq '.id')"
+                  jq -n --argjson app_id "$app_id" '{
+                      name: "Bot-owned main",
+                      target: "branch",
+                      enforcement: "active",
+                      bypass_actors: [{
+                          actor_id: $app_id,
+                          actor_type: "Integration",
+                          bypass_mode: "always"
+                      }],
+                      conditions: {
+                          ref_name: {
+                              include: ["refs/heads/main"],
+                              exclude: []
+                          }
+                      },
+                      rules: [
+                          { type: "update" },
+                          { type: "deletion" },
+                          { type: "non_fast_forward" }
+                      ]
+                  }' | gh api --method POST "repos/$REPOSITORY/rulesets" --input -

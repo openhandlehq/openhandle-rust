@@ -1,0 +1,28 @@
+name: Release
+
+on:
+    workflow_dispatch:
+    push:
+        branches: [main]
+
+permissions:
+    contents: read
+
+jobs:
+    release:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Create SDK release token
+              id: app-token
+              uses: actions/create-github-app-token@v3
+              with:
+                  app-id: ${{ secrets.SDK_SYNC_APP_ID }}
+                  private-key: ${{ secrets.SDK_SYNC_APP_PRIVATE_KEY }}
+                  owner: openhandlehq
+                  repositories: openhandle-rust
+                  permission-contents: write
+                  permission-pull-requests: write
+
+            - uses: googleapis/release-please-action@v5
+              with:
+                  token: ${{ steps.app-token.outputs.token }}

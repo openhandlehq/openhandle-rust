@@ -1,0 +1,61 @@
+name: Restore GitHub release
+
+run-name: Restore ${{ inputs.tag }} as openhandle-sdk-sync[bot]
+
+on:
+    workflow_dispatch:
+        inputs:
+            tag:
+                description: Existing semantic-version tag
+                required: true
+                default: v0.1.0
+                type: string
+
+permissions:
+    contents: read
+
+jobs:
+    restore:
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        steps:
+            - uses: actions/checkout@v7
+              with:
+                  ref: ${{ inputs.tag }}
+
+            - name: Create SDK release token
+              id: app-token
+              uses: actions/create-github-app-token@v3
+              with:
+                  app-id: ${{ secrets.SDK_SYNC_APP_ID }}
+                  private-key: ${{ secrets.SDK_SYNC_APP_PRIVATE_KEY }}
+                  owner: openhandlehq
+                  repositories: openhandle-rust
+                  permission-contents: write
+
+            - name: Restore release from changelog
+              env:
+                  GH_TOKEN: ${{ steps.app-token.outputs.token }}
+                  REPOSITORY: ${{ github.repository }}
+                  TAG: ${{ inputs.tag }}
+              run: |
+                  [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+
+                  if gh release view "$TAG" --repo "$REPOSITORY" >/dev/null 2>&1; then
+                      echo "Release $TAG already exists"
+                      exit 0
+                  fi
+
+                  version="${TAG#v}"
+                  awk -v version="$version" '
+                      index($0, "## " version " ") == 1 { found = 1; next }
+                      found && /^## / { exit }
+                      found { print }
+                  ' CHANGELOG.md > release-notes.md
+                  test -s release-notes.md
+
+                  gh release create "$TAG" \
+                      --repo "$REPOSITORY" \
+                      --title "$TAG" \
+                      --notes-file release-notes.md \
+                      --verify-tag

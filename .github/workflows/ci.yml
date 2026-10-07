@@ -1,0 +1,40 @@
+name: CI
+
+on:
+    pull_request:
+    push:
+        branches: [main]
+
+permissions:
+    contents: read
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        steps:
+            - uses: actions/checkout@v7
+            - uses: dtolnay/rust-toolchain@stable
+              with:
+                  components: clippy, rustfmt
+            - uses: Swatinem/rust-cache@v2
+            - run: cargo xtask generate --check
+            - run: cargo fmt --check
+            - run: cargo clippy --all-targets --locked -- -D warnings
+            - run: cargo test --locked
+            - run: cargo xtask score-agent-eval evals/reference
+            - run: cargo package --locked
+
+    msrv:
+        runs-on: ubuntu-latest
+        timeout-minutes: 20
+        steps:
+            - uses: actions/checkout@v7
+            - name: Read the minimum supported Rust version
+              id: msrv
+              run: echo "version=$(sed -n 's/^rust-version = "\(.*\)"$/\1/p' Cargo.toml)" >> "$GITHUB_OUTPUT"
+            - uses: dtolnay/rust-toolchain@master
+              with:
+                  toolchain: ${{ steps.msrv.outputs.version }}
+            - uses: Swatinem/rust-cache@v2
+            - run: cargo check --locked --lib

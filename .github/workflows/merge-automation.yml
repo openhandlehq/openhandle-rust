@@ -1,0 +1,99 @@
+name: Merge SDK automation PRs
+
+on:
+    pull_request_target:
+        types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+    contents: read
+
+jobs:
+    merge:
+        if: github.event.pull_request.user.login == 'openhandle-sdk-sync[bot]'
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        steps:
+            - name: Create SDK merge token
+              id: app-token
+              uses: actions/create-github-app-token@v3
+              with:
+                  app-id: ${{ secrets.SDK_SYNC_APP_ID }}
+                  private-key: ${{ secrets.SDK_SYNC_APP_PRIVATE_KEY }}
+                  owner: openhandlehq
+                  repositories: openhandle-rust
+                  permission-contents: write
+                  permission-pull-requests: write
+
+            - name: Validate bot pull request
+              id: pull-request
+              env:
+                  GH_TOKEN: ${{ steps.app-token.outputs.token }}
+                  EVENT_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+                  PR_NUMBER: ${{ github.event.pull_request.number }}
+                  REPOSITORY: ${{ github.repository }}
+              run: |
+                  pr="$(gh api "repos/$REPOSITORY/pulls/$PR_NUMBER")"
+
+                  test "$(jq -r '.user.login' <<< "$pr")" = 'openhandle-sdk-sync[bot]'
+                  test "$(jq -r '.base.ref' <<< "$pr")" = 'main'
+                  test "$(jq -r '.head.repo.full_name' <<< "$pr")" = "$REPOSITORY"
+                  test "$(jq -r '.draft' <<< "$pr")" = 'false'
+                  test "$(jq -r '.state' <<< "$pr")" = 'open'
+
+                  head_ref="$(jq -r '.head.ref' <<< "$pr")"
+                  title="$(jq -r '.title' <<< "$pr")"
+                  case "$head_ref" in
+                      automation/api-*) test "$title" = 'feat: sync API contract' ;;
+                      release-please--branches--main*) [[ "$title" == chore\(main\):\ release\ * ]] ;;
+                      *) echo "Refusing untrusted bot branch: $head_ref" >&2; exit 1 ;;
+                  esac
+
+                  head_sha="$(jq -r '.head.sha' <<< "$pr")"
+                  if [[ "$head_sha" != "$EVENT_HEAD_SHA" ]]; then
+                      echo "Ignoring stale event for $EVENT_HEAD_SHA; current head is $head_sha."
+                      exit 0
+                  fi
+
+                  echo "head-sha=$head_sha" >> "$GITHUB_OUTPUT"
+
+            - name: Wait for SDK CI
+              if: steps.pull-request.outputs.head-sha != ''
+              env:
+                  GH_TOKEN: ${{ steps.app-token.outputs.token }}
+                  HEAD_SHA: ${{ steps.pull-request.outputs.head-sha }}
+                  REPOSITORY: ${{ github.repository }}
+              run: |
+                  for attempt in $(seq 1 90); do
+                      checks="$(gh api "repos/$REPOSITORY/commits/$HEAD_SHA/check-runs")"
+                      test_count="$(jq '[.check_runs[] | select(.name == "test")] | length' <<< "$checks")"
+                      failed_count="$(jq '[.check_runs[] | select(.name == "test" and .status == "completed" and .conclusion != "success")] | length' <<< "$checks")"
+                      pending_count="$(jq '[.check_runs[] | select(.name == "test" and .status != "completed")] | length' <<< "$checks")"
+
+                      if (( failed_count > 0 )); then
+                          echo "SDK CI failed for $HEAD_SHA." >&2
+                          exit 1
+                      fi
+                      if (( test_count > 0 && pending_count == 0 )); then
+                          echo "SDK CI passed for $HEAD_SHA."
+                          exit 0
+                      fi
+
+                      echo "Waiting for SDK CI (attempt $attempt/90)."
+                      sleep 10
+                  done
+
+                  echo "Timed out waiting for SDK CI." >&2
+                  exit 1
+
+            - name: Merge as SDK bot
+              if: steps.pull-request.outputs.head-sha != ''
+              env:
+                  GH_TOKEN: ${{ steps.app-token.outputs.token }}
+                  HEAD_SHA: ${{ steps.pull-request.outputs.head-sha }}
+                  PR_NUMBER: ${{ github.event.pull_request.number }}
+                  REPOSITORY: ${{ github.repository }}
+              run: |
+                  result="$(gh api --method PUT "repos/$REPOSITORY/pulls/$PR_NUMBER/merge" \
+                      -f merge_method=merge \
+                      -f sha="$HEAD_SHA")"
+                  test "$(jq -r '.merged' <<< "$result")" = 'true'
