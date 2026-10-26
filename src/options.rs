@@ -87,6 +87,9 @@ pub enum Platform {
     Twitter,
     /// Reddit.
     Reddit,
+    /// YouTube.
+    #[serde(rename = "youtube")]
+    YouTube,
     /// A platform this SDK version does not know yet.
     #[serde(other)]
     Unknown,
@@ -100,6 +103,7 @@ impl Platform {
             Self::TikTok => "tiktok",
             Self::Twitter => "twitter",
             Self::Reddit => "reddit",
+            Self::YouTube => "youtube",
             Self::Unknown => "unknown",
         }
     }

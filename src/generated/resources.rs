@@ -51,6 +51,13 @@ impl Client {
         }
     }
 
+    /// Selects the YouTube resources. This never sends a request.
+    pub fn youtube(&self) -> YouTubeResource {
+        YouTubeResource {
+            scope: Scope::new(self.clone()),
+        }
+    }
+
     /// Fetch the resource at a social URL.
     ///
     /// Parse a supported social URL locally, then return the same typed resource as its
@@ -5780,6 +5787,1427 @@ impl TwitterSearchUsersResource {
     }
 }
 
+/// The `youtube` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeResource {
+    scope: Scope,
+}
+
+impl YouTubeResource {
+    /// Selects the charts resources. This never sends a request.
+    pub fn charts(&self) -> YouTubeChartsResource {
+        YouTubeChartsResource {
+            scope: self.scope.clone(),
+        }
+    }
+
+    /// Selects one community post. This never sends a request.
+    ///
+    /// A raw string is the native ID or shorthand unless it is a supported social
+    /// URL. Pass [`Id`](crate::Id) or [`Url`](crate::Url) to state the meaning.
+    /// An invalid reference fails the first operation, before any request.
+    pub fn community_post(
+        &self,
+        reference: impl Into<ResourceReference>,
+    ) -> YouTubeCommunityPostResource {
+        YouTubeCommunityPostResource {
+            scope: self.scope.select(
+                "identifier",
+                "youtube",
+                "communityPost",
+                Reference::from(reference.into()),
+            ),
+        }
+    }
+
+    /// Selects one hashtag. This never sends a request.
+    ///
+    /// A raw string is the native ID or shorthand unless it is a supported social
+    /// URL. Pass [`Id`](crate::Id) or [`Url`](crate::Url) to state the meaning.
+    /// An invalid reference fails the first operation, before any request.
+    pub fn hashtag(&self, reference: impl Into<ResourceReference>) -> YouTubeHashtagResource {
+        YouTubeHashtagResource {
+            scope: self.scope.select(
+                "identifier",
+                "youtube",
+                "hashtag",
+                Reference::from(reference.into()),
+            ),
+        }
+    }
+
+    /// Selects one playlist. This never sends a request.
+    ///
+    /// A raw string is the native ID or shorthand unless it is a supported social
+    /// URL. Pass [`Id`](crate::Id) or [`Url`](crate::Url) to state the meaning.
+    /// An invalid reference fails the first operation, before any request.
+    pub fn playlist(&self, reference: impl Into<ResourceReference>) -> YouTubePlaylistResource {
+        YouTubePlaylistResource {
+            scope: self.scope.select(
+                "identifier",
+                "youtube",
+                "playlist",
+                Reference::from(reference.into()),
+            ),
+        }
+    }
+
+    /// Selects one post. This never sends a request.
+    ///
+    /// A raw string is the native ID or shorthand unless it is a supported social
+    /// URL. Pass [`Id`](crate::Id) or [`Url`](crate::Url) to state the meaning.
+    /// An invalid reference fails the first operation, before any request.
+    pub fn post(&self, reference: impl Into<ResourceReference>) -> YouTubePostResource {
+        YouTubePostResource {
+            scope: self.scope.select(
+                "identifier",
+                "youtube",
+                "post",
+                Reference::from(reference.into()),
+            ),
+        }
+    }
+
+    /// Selects one profile. This never sends a request.
+    ///
+    /// A raw string is a username unless it is a supported social URL. Pass
+    /// [`Username`](crate::Username), [`Id`](crate::Id), or [`Url`](crate::Url) to state the meaning.
+    /// An invalid reference fails the first operation, before any request.
+    pub fn profile(&self, reference: impl Into<ProfileReference>) -> YouTubeProfileResource {
+        YouTubeProfileResource {
+            scope: self.scope.select(
+                "identifier",
+                "youtube",
+                "profile",
+                Reference::from(reference.into()),
+            ),
+        }
+    }
+
+    /// Selects the search resources. This never sends a request.
+    pub fn search(&self) -> YouTubeSearchResource {
+        YouTubeSearchResource {
+            scope: self.scope.clone(),
+        }
+    }
+
+    /// Selects the trending resources. This never sends a request.
+    pub fn trending(&self) -> YouTubeTrendingResource {
+        YouTubeTrendingResource {
+            scope: self.scope.clone(),
+        }
+    }
+}
+
+/// The `youtube.charts` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeChartsResource {
+    scope: Scope,
+}
+
+impl YouTubeChartsResource {
+    /// Selects the artists resources. This never sends a request.
+    pub fn artists(&self) -> YouTubeChartsArtistsResource {
+        YouTubeChartsArtistsResource {
+            scope: self.scope.clone(),
+        }
+    }
+
+    /// Selects the tracks resources. This never sends a request.
+    pub fn tracks(&self) -> YouTubeChartsTracksResource {
+        YouTubeChartsTracksResource {
+            scope: self.scope.clone(),
+        }
+    }
+
+    /// Selects the videos resources. This never sends a request.
+    pub fn videos(&self) -> YouTubeChartsVideosResource {
+        YouTubeChartsVideosResource {
+            scope: self.scope.clone(),
+        }
+    }
+}
+
+/// The `youtube.charts.artists` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeChartsArtistsResource {
+    scope: Scope,
+}
+
+impl YouTubeChartsArtistsResource {
+    /// List top artists.
+    ///
+    /// Return the weekly top artists chart of one country. Test and Live use the same
+    /// route, parameters, response schema, pagination, and errors. In Test, null means
+    /// unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/charts/artists`
+    pub async fn list(
+        &self,
+        options: impl Into<Option<YouTubeChartsArtistsOptions>>,
+    ) -> Result<YouTubeChartsArtistsResponse, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/charts/artists",
+                options.query(),
+                options.request_options,
+            )?
+            .send()
+            .await
+    }
+}
+
+/// The `youtube.charts.tracks` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeChartsTracksResource {
+    scope: Scope,
+}
+
+impl YouTubeChartsTracksResource {
+    /// List top songs.
+    ///
+    /// Return the weekly top songs chart of one country. Test and Live use the same
+    /// route, parameters, response schema, pagination, and errors. In Test, null means
+    /// unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/charts/tracks`
+    pub async fn list(
+        &self,
+        options: impl Into<Option<YouTubeChartsTracksOptions>>,
+    ) -> Result<YouTubeChartsTracksResponse, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/charts/tracks",
+                options.query(),
+                options.request_options,
+            )?
+            .send()
+            .await
+    }
+}
+
+/// The `youtube.charts.videos` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeChartsVideosResource {
+    scope: Scope,
+}
+
+impl YouTubeChartsVideosResource {
+    /// List top music videos.
+    ///
+    /// Return the weekly top music videos chart of one country. Test and Live use the
+    /// same route, parameters, response schema, pagination, and errors. In Test, null
+    /// means unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/charts/videos`
+    pub async fn list(
+        &self,
+        options: impl Into<Option<YouTubeChartsVideosOptions>>,
+    ) -> Result<YouTubeChartsVideosResponse, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/charts/videos",
+                options.query(),
+                options.request_options,
+            )?
+            .send()
+            .await
+    }
+}
+
+/// One selected community post on YouTube.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeCommunityPostResource {
+    scope: Scope,
+}
+
+impl YouTubeCommunityPostResource {
+    /// Selects the comments resources. This never sends a request.
+    pub fn comments(&self) -> YouTubeCommunityPostCommentsResource {
+        YouTubeCommunityPostCommentsResource {
+            scope: self.scope.clone(),
+        }
+    }
+
+    /// Get a community post.
+    ///
+    /// Return one public YouTube community post. Test and Live use the same route,
+    /// parameters, response schema, pagination, and errors. In Test, null means
+    /// unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/community-posts/{identifier}`
+    pub async fn get(
+        &self,
+        options: impl Into<Option<YouTubeCommunityPostOptions>>,
+    ) -> Result<YouTubeCommunityPostResponse, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/community-posts/{identifier}",
+                options.query(),
+                options.request_options,
+            )?
+            .send()
+            .await
+    }
+}
+
+/// The `youtube.communityPost.comments` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeCommunityPostCommentsResource {
+    scope: Scope,
+}
+
+impl YouTubeCommunityPostCommentsResource {
+    /// List community post comments.
+    ///
+    /// Return the comments of a public YouTube community post. Test and Live use the
+    /// same route, parameters, response schema, pagination, and errors. In Test, null
+    /// means unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/community-posts/{identifier}/comments`
+    pub async fn list(
+        &self,
+        options: impl Into<Option<YouTubeCommunityPostCommentsOptions>>,
+    ) -> Result<YouTubeCommunityPostCommentsPage, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/community-posts/{identifier}/comments",
+                options.query(),
+                options.request_options,
+            )?
+            .send_page()
+            .await
+    }
+
+    /// Iterates lazily over every item of [`list`](Self::list), one page per request.
+    pub fn items(
+        &self,
+        options: impl Into<Option<YouTubeCommunityPostCommentsOptions>>,
+    ) -> Items<YouTubeComment> {
+        let options = options.into().unwrap_or_default();
+        Items::new(self.scope.operation(
+            Method::GET,
+            "/v1/youtube/community-posts/{identifier}/comments",
+            options.query(),
+            options.request_options,
+        ))
+    }
+}
+
+/// One selected hashtag on YouTube.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeHashtagResource {
+    scope: Scope,
+}
+
+impl YouTubeHashtagResource {
+    /// Selects the posts resources. This never sends a request.
+    pub fn posts(&self) -> YouTubeHashtagPostsResource {
+        YouTubeHashtagPostsResource {
+            scope: self.scope.clone(),
+        }
+    }
+}
+
+/// The `youtube.hashtag.posts` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeHashtagPostsResource {
+    scope: Scope,
+}
+
+impl YouTubeHashtagPostsResource {
+    /// List hashtag posts.
+    ///
+    /// Return the public YouTube videos and Shorts of one hashtag. Test and Live use
+    /// the same route, parameters, response schema, pagination, and errors. In Test,
+    /// null means unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/hashtags/{identifier}/posts`
+    pub async fn list(
+        &self,
+        options: impl Into<Option<YouTubeHashtagPostsOptions>>,
+    ) -> Result<YouTubeHashtagPostsPage, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/hashtags/{identifier}/posts",
+                options.query(),
+                options.request_options,
+            )?
+            .send_page()
+            .await
+    }
+
+    /// Iterates lazily over every item of [`list`](Self::list), one page per request.
+    pub fn items(
+        &self,
+        options: impl Into<Option<YouTubeHashtagPostsOptions>>,
+    ) -> Items<YouTubePost> {
+        let options = options.into().unwrap_or_default();
+        Items::new(self.scope.operation(
+            Method::GET,
+            "/v1/youtube/hashtags/{identifier}/posts",
+            options.query(),
+            options.request_options,
+        ))
+    }
+}
+
+/// One selected playlist on YouTube.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubePlaylistResource {
+    scope: Scope,
+}
+
+impl YouTubePlaylistResource {
+    /// Selects the posts resources. This never sends a request.
+    pub fn posts(&self) -> YouTubePlaylistPostsResource {
+        YouTubePlaylistPostsResource {
+            scope: self.scope.clone(),
+        }
+    }
+}
+
+/// The `youtube.playlist.posts` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubePlaylistPostsResource {
+    scope: Scope,
+}
+
+impl YouTubePlaylistPostsResource {
+    /// List playlist posts.
+    ///
+    /// Return the videos of a public YouTube playlist. Test and Live use the same
+    /// route, parameters, response schema, pagination, and errors. In Test, null means
+    /// unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/playlists/{identifier}/posts`
+    pub async fn list(
+        &self,
+        options: impl Into<Option<YouTubePlaylistPostsOptions>>,
+    ) -> Result<YouTubePlaylistPostsPage, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/playlists/{identifier}/posts",
+                options.query(),
+                options.request_options,
+            )?
+            .send_page()
+            .await
+    }
+
+    /// Iterates lazily over every item of [`list`](Self::list), one page per request.
+    pub fn items(
+        &self,
+        options: impl Into<Option<YouTubePlaylistPostsOptions>>,
+    ) -> Items<YouTubePost> {
+        let options = options.into().unwrap_or_default();
+        Items::new(self.scope.operation(
+            Method::GET,
+            "/v1/youtube/playlists/{identifier}/posts",
+            options.query(),
+            options.request_options,
+        ))
+    }
+}
+
+/// One selected post on YouTube.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubePostResource {
+    scope: Scope,
+}
+
+impl YouTubePostResource {
+    /// Selects one comment. This never sends a request.
+    ///
+    /// A raw string is the native ID or shorthand unless it is a supported social
+    /// URL. Pass [`Id`](crate::Id) or [`Url`](crate::Url) to state the meaning.
+    /// An invalid reference fails the first operation, before any request.
+    pub fn comment(&self, reference: impl Into<ResourceReference>) -> YouTubePostCommentResource {
+        YouTubePostCommentResource {
+            scope: self.scope.select(
+                "comment_id",
+                "youtube",
+                "comment",
+                Reference::from(reference.into()),
+            ),
+        }
+    }
+
+    /// Selects the comments resources. This never sends a request.
+    pub fn comments(&self) -> YouTubePostCommentsResource {
+        YouTubePostCommentsResource {
+            scope: self.scope.clone(),
+        }
+    }
+
+    /// Selects the related resources. This never sends a request.
+    pub fn related(&self) -> YouTubePostRelatedResource {
+        YouTubePostRelatedResource {
+            scope: self.scope.clone(),
+        }
+    }
+
+    /// Selects the sound posts resources. This never sends a request.
+    pub fn sound_posts(&self) -> YouTubePostSoundPostsResource {
+        YouTubePostSoundPostsResource {
+            scope: self.scope.clone(),
+        }
+    }
+
+    /// Selects the transcript resources. This never sends a request.
+    pub fn transcript(&self) -> YouTubePostTranscriptResource {
+        YouTubePostTranscriptResource {
+            scope: self.scope.clone(),
+        }
+    }
+
+    /// Get a post.
+    ///
+    /// Return one public YouTube video, Short, or livestream with its exact counts and
+    /// publication time. Test and Live use the same route, parameters, response schema,
+    /// pagination, and errors. In Test, null means unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/posts/{identifier}`
+    pub async fn get(
+        &self,
+        options: impl Into<Option<YouTubePostOptions>>,
+    ) -> Result<YouTubePostResponse, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/posts/{identifier}",
+                options.query(),
+                options.request_options,
+            )?
+            .send()
+            .await
+    }
+}
+
+/// One selected comment on YouTube.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubePostCommentResource {
+    scope: Scope,
+}
+
+impl YouTubePostCommentResource {
+    /// Selects the replies resources. This never sends a request.
+    pub fn replies(&self) -> YouTubePostCommentRepliesResource {
+        YouTubePostCommentRepliesResource {
+            scope: self.scope.clone(),
+        }
+    }
+}
+
+/// The `youtube.post.comment.replies` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubePostCommentRepliesResource {
+    scope: Scope,
+}
+
+impl YouTubePostCommentRepliesResource {
+    /// List comment replies.
+    ///
+    /// Return the replies of one YouTube comment. Pass the repliesToken that comment
+    /// carried. Test and Live use the same route, parameters, response schema,
+    /// pagination, and errors. In Test, null means unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/posts/{identifier}/comments/{comment_id}/replies`
+    pub async fn list(
+        &self,
+        options: YouTubePostCommentRepliesOptions,
+    ) -> Result<YouTubePostCommentRepliesPage, Error> {
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/posts/{identifier}/comments/{comment_id}/replies",
+                options.query(),
+                options.request_options,
+            )?
+            .send_page()
+            .await
+    }
+
+    /// Iterates lazily over every item of [`list`](Self::list), one page per request.
+    pub fn items(&self, options: YouTubePostCommentRepliesOptions) -> Items<YouTubeComment> {
+        Items::new(self.scope.operation(
+            Method::GET,
+            "/v1/youtube/posts/{identifier}/comments/{comment_id}/replies",
+            options.query(),
+            options.request_options,
+        ))
+    }
+}
+
+/// The `youtube.post.comments` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubePostCommentsResource {
+    scope: Scope,
+}
+
+impl YouTubePostCommentsResource {
+    /// List post comments.
+    ///
+    /// Return the top-level comments of a public YouTube video or Short. Test and Live
+    /// use the same route, parameters, response schema, pagination, and errors. In
+    /// Test, null means unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/posts/{identifier}/comments`
+    pub async fn list(
+        &self,
+        options: impl Into<Option<YouTubePostCommentsOptions>>,
+    ) -> Result<YouTubePostCommentsPage, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/posts/{identifier}/comments",
+                options.query(),
+                options.request_options,
+            )?
+            .send_page()
+            .await
+    }
+
+    /// Iterates lazily over every item of [`list`](Self::list), one page per request.
+    pub fn items(
+        &self,
+        options: impl Into<Option<YouTubePostCommentsOptions>>,
+    ) -> Items<YouTubeComment> {
+        let options = options.into().unwrap_or_default();
+        Items::new(self.scope.operation(
+            Method::GET,
+            "/v1/youtube/posts/{identifier}/comments",
+            options.query(),
+            options.request_options,
+        ))
+    }
+}
+
+/// The `youtube.post.related` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubePostRelatedResource {
+    scope: Scope,
+}
+
+impl YouTubePostRelatedResource {
+    /// List related posts.
+    ///
+    /// Return the videos YouTube suggests next to a public video. Test and Live use the
+    /// same route, parameters, response schema, pagination, and errors. In Test, null
+    /// means unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/posts/{identifier}/related`
+    pub async fn list(
+        &self,
+        options: impl Into<Option<YouTubePostRelatedOptions>>,
+    ) -> Result<YouTubePostRelatedPage, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/posts/{identifier}/related",
+                options.query(),
+                options.request_options,
+            )?
+            .send_page()
+            .await
+    }
+
+    /// Iterates lazily over every item of [`list`](Self::list), one page per request.
+    pub fn items(
+        &self,
+        options: impl Into<Option<YouTubePostRelatedOptions>>,
+    ) -> Items<YouTubePost> {
+        let options = options.into().unwrap_or_default();
+        Items::new(self.scope.operation(
+            Method::GET,
+            "/v1/youtube/posts/{identifier}/related",
+            options.query(),
+            options.request_options,
+        ))
+    }
+}
+
+/// The `youtube.post.soundPosts` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubePostSoundPostsResource {
+    scope: Scope,
+}
+
+impl YouTubePostSoundPostsResource {
+    /// List posts using the same sound.
+    ///
+    /// Return the Shorts that use the sound of a public Short. Test and Live use the
+    /// same route, parameters, response schema, pagination, and errors. In Test, null
+    /// means unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/posts/{identifier}/sound-posts`
+    pub async fn list(
+        &self,
+        options: impl Into<Option<YouTubePostSoundPostsOptions>>,
+    ) -> Result<YouTubePostSoundPostsPage, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/posts/{identifier}/sound-posts",
+                options.query(),
+                options.request_options,
+            )?
+            .send_page()
+            .await
+    }
+
+    /// Iterates lazily over every item of [`list`](Self::list), one page per request.
+    pub fn items(
+        &self,
+        options: impl Into<Option<YouTubePostSoundPostsOptions>>,
+    ) -> Items<YouTubePost> {
+        let options = options.into().unwrap_or_default();
+        Items::new(self.scope.operation(
+            Method::GET,
+            "/v1/youtube/posts/{identifier}/sound-posts",
+            options.query(),
+            options.request_options,
+        ))
+    }
+}
+
+/// The `youtube.post.transcript` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubePostTranscriptResource {
+    scope: Scope,
+}
+
+impl YouTubePostTranscriptResource {
+    /// Get a transcript.
+    ///
+    /// Return the timed caption text of a public YouTube video in one of its caption
+    /// languages. Test and Live use the same route, parameters, response schema,
+    /// pagination, and errors. In Test, null means unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/posts/{identifier}/transcript`
+    pub async fn get(
+        &self,
+        options: impl Into<Option<YouTubePostTranscriptOptions>>,
+    ) -> Result<YouTubePostTranscriptResponse, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/posts/{identifier}/transcript",
+                options.query(),
+                options.request_options,
+            )?
+            .send()
+            .await
+    }
+}
+
+/// One selected profile on YouTube.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeProfileResource {
+    scope: Scope,
+}
+
+impl YouTubeProfileResource {
+    /// Selects the community posts resources. This never sends a request.
+    pub fn community_posts(&self) -> YouTubeProfileCommunityPostsResource {
+        YouTubeProfileCommunityPostsResource {
+            scope: self.scope.clone(),
+        }
+    }
+
+    /// Selects the livestreams resources. This never sends a request.
+    pub fn livestreams(&self) -> YouTubeProfileLivestreamsResource {
+        YouTubeProfileLivestreamsResource {
+            scope: self.scope.clone(),
+        }
+    }
+
+    /// Selects the playlists resources. This never sends a request.
+    pub fn playlists(&self) -> YouTubeProfilePlaylistsResource {
+        YouTubeProfilePlaylistsResource {
+            scope: self.scope.clone(),
+        }
+    }
+
+    /// Selects the products resources. This never sends a request.
+    pub fn products(&self) -> YouTubeProfileProductsResource {
+        YouTubeProfileProductsResource {
+            scope: self.scope.clone(),
+        }
+    }
+
+    /// Selects the search resources. This never sends a request.
+    pub fn search(&self) -> YouTubeProfileSearchResource {
+        YouTubeProfileSearchResource {
+            scope: self.scope.clone(),
+        }
+    }
+
+    /// Selects the shorts resources. This never sends a request.
+    pub fn shorts(&self) -> YouTubeProfileShortsResource {
+        YouTubeProfileShortsResource {
+            scope: self.scope.clone(),
+        }
+    }
+
+    /// Selects the videos resources. This never sends a request.
+    pub fn videos(&self) -> YouTubeProfileVideosResource {
+        YouTubeProfileVideosResource {
+            scope: self.scope.clone(),
+        }
+    }
+
+    /// Get a profile.
+    ///
+    /// Return one public YouTube channel. Use @handle or the UC channel ID. Test and
+    /// Live use the same route, parameters, response schema, pagination, and errors. In
+    /// Test, null means unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/profiles/{identifier}`
+    pub async fn get(
+        &self,
+        options: impl Into<Option<YouTubeProfileOptions>>,
+    ) -> Result<YouTubeProfileResponse, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/profiles/{identifier}",
+                options.query(),
+                options.request_options,
+            )?
+            .send()
+            .await
+    }
+}
+
+/// The `youtube.profile.communityPosts` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeProfileCommunityPostsResource {
+    scope: Scope,
+}
+
+impl YouTubeProfileCommunityPostsResource {
+    /// List profile community posts.
+    ///
+    /// Return the text, image, and poll posts of a public YouTube channel. Test and
+    /// Live use the same route, parameters, response schema, pagination, and errors. In
+    /// Test, null means unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/profiles/{identifier}/community-posts`
+    pub async fn list(
+        &self,
+        options: impl Into<Option<YouTubeProfileCommunityPostsOptions>>,
+    ) -> Result<YouTubeProfileCommunityPostsPage, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/profiles/{identifier}/community-posts",
+                options.query(),
+                options.request_options,
+            )?
+            .send_page()
+            .await
+    }
+
+    /// Iterates lazily over every item of [`list`](Self::list), one page per request.
+    pub fn items(
+        &self,
+        options: impl Into<Option<YouTubeProfileCommunityPostsOptions>>,
+    ) -> Items<YouTubeCommunityPost> {
+        let options = options.into().unwrap_or_default();
+        Items::new(self.scope.operation(
+            Method::GET,
+            "/v1/youtube/profiles/{identifier}/community-posts",
+            options.query(),
+            options.request_options,
+        ))
+    }
+}
+
+/// The `youtube.profile.livestreams` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeProfileLivestreamsResource {
+    scope: Scope,
+}
+
+impl YouTubeProfileLivestreamsResource {
+    /// List profile livestreams.
+    ///
+    /// Return the current, upcoming, and past livestreams of a public YouTube channel.
+    /// Test and Live use the same route, parameters, response schema, pagination, and
+    /// errors. In Test, null means unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/profiles/{identifier}/livestreams`
+    pub async fn list(
+        &self,
+        options: impl Into<Option<YouTubeProfileLivestreamsOptions>>,
+    ) -> Result<YouTubeProfileLivestreamsPage, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/profiles/{identifier}/livestreams",
+                options.query(),
+                options.request_options,
+            )?
+            .send_page()
+            .await
+    }
+
+    /// Iterates lazily over every item of [`list`](Self::list), one page per request.
+    pub fn items(
+        &self,
+        options: impl Into<Option<YouTubeProfileLivestreamsOptions>>,
+    ) -> Items<YouTubePost> {
+        let options = options.into().unwrap_or_default();
+        Items::new(self.scope.operation(
+            Method::GET,
+            "/v1/youtube/profiles/{identifier}/livestreams",
+            options.query(),
+            options.request_options,
+        ))
+    }
+}
+
+/// The `youtube.profile.playlists` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeProfilePlaylistsResource {
+    scope: Scope,
+}
+
+impl YouTubeProfilePlaylistsResource {
+    /// List profile playlists.
+    ///
+    /// Return the public playlists of a YouTube channel. Test and Live use the same
+    /// route, parameters, response schema, pagination, and errors. In Test, null means
+    /// unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/profiles/{identifier}/playlists`
+    pub async fn list(
+        &self,
+        options: impl Into<Option<YouTubeProfilePlaylistsOptions>>,
+    ) -> Result<YouTubeProfilePlaylistsPage, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/profiles/{identifier}/playlists",
+                options.query(),
+                options.request_options,
+            )?
+            .send_page()
+            .await
+    }
+
+    /// Iterates lazily over every item of [`list`](Self::list), one page per request.
+    pub fn items(
+        &self,
+        options: impl Into<Option<YouTubeProfilePlaylistsOptions>>,
+    ) -> Items<YouTubePlaylist> {
+        let options = options.into().unwrap_or_default();
+        Items::new(self.scope.operation(
+            Method::GET,
+            "/v1/youtube/profiles/{identifier}/playlists",
+            options.query(),
+            options.request_options,
+        ))
+    }
+}
+
+/// The `youtube.profile.products` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeProfileProductsResource {
+    scope: Scope,
+}
+
+impl YouTubeProfileProductsResource {
+    /// List profile products.
+    ///
+    /// Return the products on the store shelf of a public YouTube channel. Test and
+    /// Live use the same route, parameters, response schema, pagination, and errors. In
+    /// Test, null means unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/profiles/{identifier}/products`
+    pub async fn list(
+        &self,
+        options: impl Into<Option<YouTubeProfileProductsOptions>>,
+    ) -> Result<YouTubeProfileProductsPage, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/profiles/{identifier}/products",
+                options.query(),
+                options.request_options,
+            )?
+            .send_page()
+            .await
+    }
+
+    /// Iterates lazily over every item of [`list`](Self::list), one page per request.
+    pub fn items(
+        &self,
+        options: impl Into<Option<YouTubeProfileProductsOptions>>,
+    ) -> Items<YouTubeProduct> {
+        let options = options.into().unwrap_or_default();
+        Items::new(self.scope.operation(
+            Method::GET,
+            "/v1/youtube/profiles/{identifier}/products",
+            options.query(),
+            options.request_options,
+        ))
+    }
+}
+
+/// The `youtube.profile.search` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeProfileSearchResource {
+    scope: Scope,
+}
+
+impl YouTubeProfileSearchResource {
+    /// Search profile videos.
+    ///
+    /// Search the videos of one public YouTube channel. Test and Live use the same
+    /// route, parameters, response schema, pagination, and errors. In Test, null means
+    /// unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/profiles/{identifier}/search`
+    pub async fn list(
+        &self,
+        options: YouTubeProfileSearchOptions,
+    ) -> Result<YouTubeProfileSearchPage, Error> {
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/profiles/{identifier}/search",
+                options.query(),
+                options.request_options,
+            )?
+            .send_page()
+            .await
+    }
+
+    /// Iterates lazily over every item of [`list`](Self::list), one page per request.
+    pub fn items(&self, options: YouTubeProfileSearchOptions) -> Items<YouTubePost> {
+        Items::new(self.scope.operation(
+            Method::GET,
+            "/v1/youtube/profiles/{identifier}/search",
+            options.query(),
+            options.request_options,
+        ))
+    }
+}
+
+/// The `youtube.profile.shorts` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeProfileShortsResource {
+    scope: Scope,
+}
+
+impl YouTubeProfileShortsResource {
+    /// List profile Shorts.
+    ///
+    /// Return the Shorts of a public YouTube channel. Test and Live use the same route,
+    /// parameters, response schema, pagination, and errors. In Test, null means
+    /// unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/profiles/{identifier}/shorts`
+    pub async fn list(
+        &self,
+        options: impl Into<Option<YouTubeProfileShortsOptions>>,
+    ) -> Result<YouTubeProfileShortsPage, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/profiles/{identifier}/shorts",
+                options.query(),
+                options.request_options,
+            )?
+            .send_page()
+            .await
+    }
+
+    /// Iterates lazily over every item of [`list`](Self::list), one page per request.
+    pub fn items(
+        &self,
+        options: impl Into<Option<YouTubeProfileShortsOptions>>,
+    ) -> Items<YouTubePost> {
+        let options = options.into().unwrap_or_default();
+        Items::new(self.scope.operation(
+            Method::GET,
+            "/v1/youtube/profiles/{identifier}/shorts",
+            options.query(),
+            options.request_options,
+        ))
+    }
+}
+
+/// The `youtube.profile.videos` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeProfileVideosResource {
+    scope: Scope,
+}
+
+impl YouTubeProfileVideosResource {
+    /// List profile videos.
+    ///
+    /// Return the videos of a public YouTube channel. Test and Live use the same route,
+    /// parameters, response schema, pagination, and errors. In Test, null means
+    /// unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/profiles/{identifier}/videos`
+    pub async fn list(
+        &self,
+        options: impl Into<Option<YouTubeProfileVideosOptions>>,
+    ) -> Result<YouTubeProfileVideosPage, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/profiles/{identifier}/videos",
+                options.query(),
+                options.request_options,
+            )?
+            .send_page()
+            .await
+    }
+
+    /// Iterates lazily over every item of [`list`](Self::list), one page per request.
+    pub fn items(
+        &self,
+        options: impl Into<Option<YouTubeProfileVideosOptions>>,
+    ) -> Items<YouTubePost> {
+        let options = options.into().unwrap_or_default();
+        Items::new(self.scope.operation(
+            Method::GET,
+            "/v1/youtube/profiles/{identifier}/videos",
+            options.query(),
+            options.request_options,
+        ))
+    }
+}
+
+/// The `youtube.search` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeSearchResource {
+    scope: Scope,
+}
+
+impl YouTubeSearchResource {
+    /// Selects the playlists resources. This never sends a request.
+    pub fn playlists(&self) -> YouTubeSearchPlaylistsResource {
+        YouTubeSearchPlaylistsResource {
+            scope: self.scope.clone(),
+        }
+    }
+
+    /// Selects the posts resources. This never sends a request.
+    pub fn posts(&self) -> YouTubeSearchPostsResource {
+        YouTubeSearchPostsResource {
+            scope: self.scope.clone(),
+        }
+    }
+
+    /// Selects the profiles resources. This never sends a request.
+    pub fn profiles(&self) -> YouTubeSearchProfilesResource {
+        YouTubeSearchProfilesResource {
+            scope: self.scope.clone(),
+        }
+    }
+
+    /// Selects the suggestions resources. This never sends a request.
+    pub fn suggestions(&self) -> YouTubeSearchSuggestionsResource {
+        YouTubeSearchSuggestionsResource {
+            scope: self.scope.clone(),
+        }
+    }
+}
+
+/// The `youtube.search.playlists` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeSearchPlaylistsResource {
+    scope: Scope,
+}
+
+impl YouTubeSearchPlaylistsResource {
+    /// Search playlists.
+    ///
+    /// Search public YouTube playlists and podcasts. Test and Live use the same route,
+    /// parameters, response schema, pagination, and errors. In Test, null means
+    /// unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/search/playlists`
+    pub async fn list(
+        &self,
+        options: YouTubeSearchPlaylistsOptions,
+    ) -> Result<YouTubeSearchPlaylistsPage, Error> {
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/search/playlists",
+                options.query(),
+                options.request_options,
+            )?
+            .send_page()
+            .await
+    }
+
+    /// Iterates lazily over every item of [`list`](Self::list), one page per request.
+    pub fn items(&self, options: YouTubeSearchPlaylistsOptions) -> Items<YouTubePlaylist> {
+        Items::new(self.scope.operation(
+            Method::GET,
+            "/v1/youtube/search/playlists",
+            options.query(),
+            options.request_options,
+        ))
+    }
+}
+
+/// The `youtube.search.posts` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeSearchPostsResource {
+    scope: Scope,
+}
+
+impl YouTubeSearchPostsResource {
+    /// Search posts.
+    ///
+    /// Search public YouTube videos or Shorts. Test and Live use the same route,
+    /// parameters, response schema, pagination, and errors. In Test, null means
+    /// unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/search/posts`
+    pub async fn list(
+        &self,
+        options: YouTubeSearchPostsOptions,
+    ) -> Result<YouTubeSearchPostsPage, Error> {
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/search/posts",
+                options.query(),
+                options.request_options,
+            )?
+            .send_page()
+            .await
+    }
+
+    /// Iterates lazily over every item of [`list`](Self::list), one page per request.
+    pub fn items(&self, options: YouTubeSearchPostsOptions) -> Items<YouTubePost> {
+        Items::new(self.scope.operation(
+            Method::GET,
+            "/v1/youtube/search/posts",
+            options.query(),
+            options.request_options,
+        ))
+    }
+}
+
+/// The `youtube.search.profiles` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeSearchProfilesResource {
+    scope: Scope,
+}
+
+impl YouTubeSearchProfilesResource {
+    /// Search profiles.
+    ///
+    /// Search public YouTube channels. Test and Live use the same route, parameters,
+    /// response schema, pagination, and errors. In Test, null means unavailable, not
+    /// zero.
+    ///
+    /// `GET /v1/youtube/search/profiles`
+    pub async fn list(
+        &self,
+        options: YouTubeSearchProfilesOptions,
+    ) -> Result<YouTubeSearchProfilesPage, Error> {
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/search/profiles",
+                options.query(),
+                options.request_options,
+            )?
+            .send_page()
+            .await
+    }
+
+    /// Iterates lazily over every item of [`list`](Self::list), one page per request.
+    pub fn items(&self, options: YouTubeSearchProfilesOptions) -> Items<YouTubeProfile> {
+        Items::new(self.scope.operation(
+            Method::GET,
+            "/v1/youtube/search/profiles",
+            options.query(),
+            options.request_options,
+        ))
+    }
+}
+
+/// The `youtube.search.suggestions` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeSearchSuggestionsResource {
+    scope: Scope,
+}
+
+impl YouTubeSearchSuggestionsResource {
+    /// Search suggestions.
+    ///
+    /// Return the autocomplete queries YouTube offers for a partial search. Test and
+    /// Live use the same route, parameters, response schema, pagination, and errors. In
+    /// Test, null means unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/search/suggestions`
+    pub async fn list(
+        &self,
+        options: YouTubeSearchSuggestionsOptions,
+    ) -> Result<YouTubeSearchSuggestionsResponse, Error> {
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/search/suggestions",
+                options.query(),
+                options.request_options,
+            )?
+            .send()
+            .await
+    }
+}
+
+/// The `youtube.trending` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeTrendingResource {
+    scope: Scope,
+}
+
+impl YouTubeTrendingResource {
+    /// Selects the posts resources. This never sends a request.
+    pub fn posts(&self) -> YouTubeTrendingPostsResource {
+        YouTubeTrendingPostsResource {
+            scope: self.scope.clone(),
+        }
+    }
+}
+
+/// The `youtube.trending.posts` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubeTrendingPostsResource {
+    scope: Scope,
+}
+
+impl YouTubeTrendingPostsResource {
+    /// List trending posts.
+    ///
+    /// Return the trending YouTube videos of one country. Test and Live use the same
+    /// route, parameters, response schema, pagination, and errors. In Test, null means
+    /// unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/trending/posts`
+    pub async fn list(
+        &self,
+        options: impl Into<Option<YouTubeTrendingPostsOptions>>,
+    ) -> Result<YouTubeTrendingPostsResponse, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/trending/posts",
+                options.query(),
+                options.request_options,
+            )?
+            .send()
+            .await
+    }
+}
+
 /// The resource returned by [`Client::fetch`]. The variant follows the
 /// platform and resource the URL represents.
 #[derive(Clone, Debug, PartialEq)]
@@ -5807,6 +7235,10 @@ pub enum FetchResource {
     RedditPost(Box<RedditPost>),
     /// A reddit subreddit.
     RedditSubreddit(Box<RedditSubreddit>),
+    /// A youtube profile.
+    YouTubeProfile(Box<YouTubeProfile>),
+    /// A youtube post.
+    YouTubePost(Box<YouTubePost>),
 }
 
 impl FetchResource {
@@ -5844,6 +7276,11 @@ impl FetchResource {
             }
             ("reddit", "subreddit") => serde_json::from_value(data)
                 .map(|value| Some(Self::RedditSubreddit(Box::new(value)))),
+            ("youtube", "profile") => serde_json::from_value(data)
+                .map(|value| Some(Self::YouTubeProfile(Box::new(value)))),
+            ("youtube", "post") => {
+                serde_json::from_value(data).map(|value| Some(Self::YouTubePost(Box::new(value))))
+            }
             _ => Ok(None),
         }
     }
@@ -9401,7 +10838,8 @@ pub struct TestDataOptions {
     pub platform: Option<crate::options::Platform>,
     /// Provider-specific public-data filter for this operation. One of `profile`,
     /// `post`, `comment`, `hashtag`, `location`, `music`, `category`, `list`, `entity`,
-    /// `subreddit`, `rule`, `wiki`, or `trophy`.
+    /// `subreddit`, `rule`, `wiki`, `trophy`, `playlist`, `transcript`, `product`, or
+    /// `chart`.
     pub resource: Option<String>,
     /// Provider-specific public-data filter for this operation.
     pub operation: Option<String>,
@@ -9433,7 +10871,8 @@ impl TestDataOptions {
 
     /// Provider-specific public-data filter for this operation. One of `profile`,
     /// `post`, `comment`, `hashtag`, `location`, `music`, `category`, `list`, `entity`,
-    /// `subreddit`, `rule`, `wiki`, or `trophy`.
+    /// `subreddit`, `rule`, `wiki`, `trophy`, `playlist`, `transcript`, `product`, or
+    /// `chart`.
     pub fn resource(mut self, value: impl Into<String>) -> Self {
         self.resource = Some(value.into());
         self
@@ -11849,3 +13288,1509 @@ impl TwitterSearchUsersOptions {
 
 /// One page returned by `twitter.search.users.list`.
 pub type TwitterSearchUsersPage = Page<TwitterProfile>;
+
+/// Options for `youtube.charts.artists.list`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubeChartsArtistsOptions {
+    /// Two-letter ISO 3166 country code. The default is US.
+    pub country: Option<String>,
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubeChartsArtistsOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Two-letter ISO 3166 country code. The default is US.
+    pub fn country(mut self, value: impl Into<String>) -> Self {
+        self.country = Some(value.into());
+        self
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("country", &self.country);
+        query.push("freshness", &self.freshness);
+        Ok(query)
+    }
+}
+
+/// Typed result of `youtube.charts.artists.list`.
+pub type YouTubeChartsArtistsResponse = Response<Vec<YouTubeChartEntry>>;
+
+/// Options for `youtube.charts.tracks.list`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubeChartsTracksOptions {
+    /// Two-letter ISO 3166 country code. The default is US.
+    pub country: Option<String>,
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubeChartsTracksOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Two-letter ISO 3166 country code. The default is US.
+    pub fn country(mut self, value: impl Into<String>) -> Self {
+        self.country = Some(value.into());
+        self
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("country", &self.country);
+        query.push("freshness", &self.freshness);
+        Ok(query)
+    }
+}
+
+/// Typed result of `youtube.charts.tracks.list`.
+pub type YouTubeChartsTracksResponse = Response<Vec<YouTubeChartEntry>>;
+
+/// Options for `youtube.charts.videos.list`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubeChartsVideosOptions {
+    /// Two-letter ISO 3166 country code. The default is US.
+    pub country: Option<String>,
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubeChartsVideosOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Two-letter ISO 3166 country code. The default is US.
+    pub fn country(mut self, value: impl Into<String>) -> Self {
+        self.country = Some(value.into());
+        self
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("country", &self.country);
+        query.push("freshness", &self.freshness);
+        Ok(query)
+    }
+}
+
+/// Typed result of `youtube.charts.videos.list`.
+pub type YouTubeChartsVideosResponse = Response<Vec<YouTubeChartEntry>>;
+
+/// Options for `youtube.communityPost.get`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubeCommunityPostOptions {
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubeCommunityPostOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("freshness", &self.freshness);
+        Ok(query)
+    }
+}
+
+/// Typed result of `youtube.communityPost.get`.
+pub type YouTubeCommunityPostResponse = Response<YouTubeCommunityPost>;
+
+/// Options for `youtube.communityPost.comments.list`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubeCommunityPostCommentsOptions {
+    /// Result ordering for this operation. One of `top`, or `newest`. The API default
+    /// is `top`.
+    pub sort: Option<String>,
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Opaque cursor returned by the previous page.
+    pub cursor: Option<String>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubeCommunityPostCommentsOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Result ordering for this operation. One of `top`, or `newest`. The API default
+    /// is `top`.
+    pub fn sort(mut self, value: impl Into<String>) -> Self {
+        self.sort = Some(value.into());
+        self
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Opaque cursor returned by the previous page.
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("sort", &self.sort);
+        query.push("freshness", &self.freshness);
+        query.push("cursor", &self.cursor);
+        Ok(query)
+    }
+}
+
+/// One page returned by `youtube.communityPost.comments.list`.
+pub type YouTubeCommunityPostCommentsPage = Page<YouTubeComment>;
+
+/// Options for `youtube.hashtag.posts.list`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubeHashtagPostsOptions {
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Opaque cursor returned by the previous page.
+    pub cursor: Option<String>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubeHashtagPostsOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Opaque cursor returned by the previous page.
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("freshness", &self.freshness);
+        query.push("cursor", &self.cursor);
+        Ok(query)
+    }
+}
+
+/// One page returned by `youtube.hashtag.posts.list`.
+pub type YouTubeHashtagPostsPage = Page<YouTubePost>;
+
+/// Options for `youtube.playlist.posts.list`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubePlaylistPostsOptions {
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Opaque cursor returned by the previous page.
+    pub cursor: Option<String>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubePlaylistPostsOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Opaque cursor returned by the previous page.
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("freshness", &self.freshness);
+        query.push("cursor", &self.cursor);
+        Ok(query)
+    }
+}
+
+/// One page returned by `youtube.playlist.posts.list`.
+pub type YouTubePlaylistPostsPage = Page<YouTubePost>;
+
+/// Options for `youtube.post.get`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubePostOptions {
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubePostOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("freshness", &self.freshness);
+        Ok(query)
+    }
+}
+
+/// Typed result of `youtube.post.get`.
+pub type YouTubePostResponse = Response<YouTubePost>;
+
+/// Options for `youtube.post.comment.replies.list`.
+#[derive(Clone, Debug, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubePostCommentRepliesOptions {
+    /// The repliesToken of the comment whose replies to read.
+    pub token: String,
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Opaque cursor returned by the previous page.
+    pub cursor: Option<String>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubePostCommentRepliesOptions {
+    /// Creates options with the required values.
+    pub fn new(token: impl Into<String>) -> Self {
+        Self {
+            token: token.into(),
+            freshness: None,
+            cursor: None,
+            request_options: RequestOptions::default(),
+        }
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Opaque cursor returned by the previous page.
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.require("token", &self.token)?;
+        query.push("freshness", &self.freshness);
+        query.push("cursor", &self.cursor);
+        Ok(query)
+    }
+}
+
+/// One page returned by `youtube.post.comment.replies.list`.
+pub type YouTubePostCommentRepliesPage = Page<YouTubeComment>;
+
+/// Options for `youtube.post.comments.list`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubePostCommentsOptions {
+    /// Result ordering for this operation. One of `top`, or `newest`. The API default
+    /// is `top`.
+    pub sort: Option<String>,
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Opaque cursor returned by the previous page.
+    pub cursor: Option<String>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubePostCommentsOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Result ordering for this operation. One of `top`, or `newest`. The API default
+    /// is `top`.
+    pub fn sort(mut self, value: impl Into<String>) -> Self {
+        self.sort = Some(value.into());
+        self
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Opaque cursor returned by the previous page.
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("sort", &self.sort);
+        query.push("freshness", &self.freshness);
+        query.push("cursor", &self.cursor);
+        Ok(query)
+    }
+}
+
+/// One page returned by `youtube.post.comments.list`.
+pub type YouTubePostCommentsPage = Page<YouTubeComment>;
+
+/// Options for `youtube.post.related.list`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubePostRelatedOptions {
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Opaque cursor returned by the previous page.
+    pub cursor: Option<String>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubePostRelatedOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Opaque cursor returned by the previous page.
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("freshness", &self.freshness);
+        query.push("cursor", &self.cursor);
+        Ok(query)
+    }
+}
+
+/// One page returned by `youtube.post.related.list`.
+pub type YouTubePostRelatedPage = Page<YouTubePost>;
+
+/// Options for `youtube.post.soundPosts.list`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubePostSoundPostsOptions {
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Opaque cursor returned by the previous page.
+    pub cursor: Option<String>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubePostSoundPostsOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Opaque cursor returned by the previous page.
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("freshness", &self.freshness);
+        query.push("cursor", &self.cursor);
+        Ok(query)
+    }
+}
+
+/// One page returned by `youtube.post.soundPosts.list`.
+pub type YouTubePostSoundPostsPage = Page<YouTubePost>;
+
+/// Options for `youtube.post.transcript.get`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubePostTranscriptOptions {
+    /// Caption language code, such as en or es-419. The default is the spoken language.
+    pub language: Option<String>,
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubePostTranscriptOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Caption language code, such as en or es-419. The default is the spoken language.
+    pub fn language(mut self, value: impl Into<String>) -> Self {
+        self.language = Some(value.into());
+        self
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("language", &self.language);
+        query.push("freshness", &self.freshness);
+        Ok(query)
+    }
+}
+
+/// Typed result of `youtube.post.transcript.get`.
+pub type YouTubePostTranscriptResponse = Response<YouTubeTranscript>;
+
+/// Options for `youtube.profile.get`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubeProfileOptions {
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubeProfileOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("freshness", &self.freshness);
+        Ok(query)
+    }
+}
+
+/// Typed result of `youtube.profile.get`.
+pub type YouTubeProfileResponse = Response<YouTubeProfile>;
+
+/// Options for `youtube.profile.communityPosts.list`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubeProfileCommunityPostsOptions {
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Opaque cursor returned by the previous page.
+    pub cursor: Option<String>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubeProfileCommunityPostsOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Opaque cursor returned by the previous page.
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("freshness", &self.freshness);
+        query.push("cursor", &self.cursor);
+        Ok(query)
+    }
+}
+
+/// One page returned by `youtube.profile.communityPosts.list`.
+pub type YouTubeProfileCommunityPostsPage = Page<YouTubeCommunityPost>;
+
+/// Options for `youtube.profile.livestreams.list`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubeProfileLivestreamsOptions {
+    /// Result ordering for this operation. One of `newest`, `popular`, or `oldest`. The
+    /// API default is `newest`.
+    pub sort: Option<String>,
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Opaque cursor returned by the previous page.
+    pub cursor: Option<String>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubeProfileLivestreamsOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Result ordering for this operation. One of `newest`, `popular`, or `oldest`. The
+    /// API default is `newest`.
+    pub fn sort(mut self, value: impl Into<String>) -> Self {
+        self.sort = Some(value.into());
+        self
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Opaque cursor returned by the previous page.
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("sort", &self.sort);
+        query.push("freshness", &self.freshness);
+        query.push("cursor", &self.cursor);
+        Ok(query)
+    }
+}
+
+/// One page returned by `youtube.profile.livestreams.list`.
+pub type YouTubeProfileLivestreamsPage = Page<YouTubePost>;
+
+/// Options for `youtube.profile.playlists.list`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubeProfilePlaylistsOptions {
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Opaque cursor returned by the previous page.
+    pub cursor: Option<String>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubeProfilePlaylistsOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Opaque cursor returned by the previous page.
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("freshness", &self.freshness);
+        query.push("cursor", &self.cursor);
+        Ok(query)
+    }
+}
+
+/// One page returned by `youtube.profile.playlists.list`.
+pub type YouTubeProfilePlaylistsPage = Page<YouTubePlaylist>;
+
+/// Options for `youtube.profile.products.list`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubeProfileProductsOptions {
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Opaque cursor returned by the previous page.
+    pub cursor: Option<String>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubeProfileProductsOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Opaque cursor returned by the previous page.
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("freshness", &self.freshness);
+        query.push("cursor", &self.cursor);
+        Ok(query)
+    }
+}
+
+/// One page returned by `youtube.profile.products.list`.
+pub type YouTubeProfileProductsPage = Page<YouTubeProduct>;
+
+/// Options for `youtube.profile.search.list`.
+#[derive(Clone, Debug, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubeProfileSearchOptions {
+    /// Public search query.
+    pub q: String,
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Opaque cursor returned by the previous page.
+    pub cursor: Option<String>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubeProfileSearchOptions {
+    /// Creates options with the required values.
+    pub fn new(q: impl Into<String>) -> Self {
+        Self {
+            q: q.into(),
+            freshness: None,
+            cursor: None,
+            request_options: RequestOptions::default(),
+        }
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Opaque cursor returned by the previous page.
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.require("q", &self.q)?;
+        query.push("freshness", &self.freshness);
+        query.push("cursor", &self.cursor);
+        Ok(query)
+    }
+}
+
+/// One page returned by `youtube.profile.search.list`.
+pub type YouTubeProfileSearchPage = Page<YouTubePost>;
+
+/// Options for `youtube.profile.shorts.list`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubeProfileShortsOptions {
+    /// Result ordering for this operation. One of `newest`, `popular`, or `oldest`. The
+    /// API default is `newest`.
+    pub sort: Option<String>,
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Opaque cursor returned by the previous page.
+    pub cursor: Option<String>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubeProfileShortsOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Result ordering for this operation. One of `newest`, `popular`, or `oldest`. The
+    /// API default is `newest`.
+    pub fn sort(mut self, value: impl Into<String>) -> Self {
+        self.sort = Some(value.into());
+        self
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Opaque cursor returned by the previous page.
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("sort", &self.sort);
+        query.push("freshness", &self.freshness);
+        query.push("cursor", &self.cursor);
+        Ok(query)
+    }
+}
+
+/// One page returned by `youtube.profile.shorts.list`.
+pub type YouTubeProfileShortsPage = Page<YouTubePost>;
+
+/// Options for `youtube.profile.videos.list`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubeProfileVideosOptions {
+    /// Result ordering for this operation. One of `newest`, `popular`, or `oldest`. The
+    /// API default is `newest`.
+    pub sort: Option<String>,
+    /// Return posts captured at or after this RFC 3339 timestamp.
+    pub since: Option<chrono::DateTime<chrono::Utc>>,
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Opaque cursor returned by the previous page.
+    pub cursor: Option<String>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubeProfileVideosOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Result ordering for this operation. One of `newest`, `popular`, or `oldest`. The
+    /// API default is `newest`.
+    pub fn sort(mut self, value: impl Into<String>) -> Self {
+        self.sort = Some(value.into());
+        self
+    }
+
+    /// Return posts captured at or after this RFC 3339 timestamp.
+    pub fn since(mut self, value: chrono::DateTime<chrono::Utc>) -> Self {
+        self.since = Some(value);
+        self
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Opaque cursor returned by the previous page.
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("sort", &self.sort);
+        query.push("since", &self.since);
+        query.push("freshness", &self.freshness);
+        query.push("cursor", &self.cursor);
+        Ok(query)
+    }
+}
+
+/// One page returned by `youtube.profile.videos.list`.
+pub type YouTubeProfileVideosPage = Page<YouTubePost>;
+
+/// Options for `youtube.search.playlists.list`.
+#[derive(Clone, Debug, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubeSearchPlaylistsOptions {
+    /// Public search query.
+    pub q: String,
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Opaque cursor returned by the previous page.
+    pub cursor: Option<String>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubeSearchPlaylistsOptions {
+    /// Creates options with the required values.
+    pub fn new(q: impl Into<String>) -> Self {
+        Self {
+            q: q.into(),
+            freshness: None,
+            cursor: None,
+            request_options: RequestOptions::default(),
+        }
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Opaque cursor returned by the previous page.
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.require("q", &self.q)?;
+        query.push("freshness", &self.freshness);
+        query.push("cursor", &self.cursor);
+        Ok(query)
+    }
+}
+
+/// One page returned by `youtube.search.playlists.list`.
+pub type YouTubeSearchPlaylistsPage = Page<YouTubePlaylist>;
+
+/// Options for `youtube.search.posts.list`.
+#[derive(Clone, Debug, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubeSearchPostsOptions {
+    /// Public search query.
+    pub q: String,
+    /// Result ordering for this operation. One of `relevance`, `rating`, `date`, or
+    /// `views`. The API default is `relevance`.
+    pub sort: Option<String>,
+    /// Media type filter. One of `video`, or `short`.
+    pub r#type: Option<String>,
+    /// Video length: short is under 4 minutes, medium 4 to 20, long over 20. One of
+    /// `short`, `medium`, or `long`.
+    pub duration: Option<String>,
+    /// Upload time window. One of `hour`, `today`, `week`, `month`, or `year`.
+    pub uploaded: Option<String>,
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Opaque cursor returned by the previous page.
+    pub cursor: Option<String>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubeSearchPostsOptions {
+    /// Creates options with the required values.
+    pub fn new(q: impl Into<String>) -> Self {
+        Self {
+            q: q.into(),
+            sort: None,
+            r#type: None,
+            duration: None,
+            uploaded: None,
+            freshness: None,
+            cursor: None,
+            request_options: RequestOptions::default(),
+        }
+    }
+
+    /// Result ordering for this operation. One of `relevance`, `rating`, `date`, or
+    /// `views`. The API default is `relevance`.
+    pub fn sort(mut self, value: impl Into<String>) -> Self {
+        self.sort = Some(value.into());
+        self
+    }
+
+    /// Media type filter. One of `video`, or `short`.
+    pub fn r#type(mut self, value: impl Into<String>) -> Self {
+        self.r#type = Some(value.into());
+        self
+    }
+
+    /// Video length: short is under 4 minutes, medium 4 to 20, long over 20. One of
+    /// `short`, `medium`, or `long`.
+    pub fn duration(mut self, value: impl Into<String>) -> Self {
+        self.duration = Some(value.into());
+        self
+    }
+
+    /// Upload time window. One of `hour`, `today`, `week`, `month`, or `year`.
+    pub fn uploaded(mut self, value: impl Into<String>) -> Self {
+        self.uploaded = Some(value.into());
+        self
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Opaque cursor returned by the previous page.
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.require("q", &self.q)?;
+        query.push("sort", &self.sort);
+        query.push("type", &self.r#type);
+        query.push("duration", &self.duration);
+        query.push("uploaded", &self.uploaded);
+        query.push("freshness", &self.freshness);
+        query.push("cursor", &self.cursor);
+        Ok(query)
+    }
+}
+
+/// One page returned by `youtube.search.posts.list`.
+pub type YouTubeSearchPostsPage = Page<YouTubePost>;
+
+/// Options for `youtube.search.profiles.list`.
+#[derive(Clone, Debug, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubeSearchProfilesOptions {
+    /// Public search query.
+    pub q: String,
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Opaque cursor returned by the previous page.
+    pub cursor: Option<String>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubeSearchProfilesOptions {
+    /// Creates options with the required values.
+    pub fn new(q: impl Into<String>) -> Self {
+        Self {
+            q: q.into(),
+            freshness: None,
+            cursor: None,
+            request_options: RequestOptions::default(),
+        }
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Opaque cursor returned by the previous page.
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.require("q", &self.q)?;
+        query.push("freshness", &self.freshness);
+        query.push("cursor", &self.cursor);
+        Ok(query)
+    }
+}
+
+/// One page returned by `youtube.search.profiles.list`.
+pub type YouTubeSearchProfilesPage = Page<YouTubeProfile>;
+
+/// Options for `youtube.search.suggestions.list`.
+#[derive(Clone, Debug, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubeSearchSuggestionsOptions {
+    /// Public search query.
+    pub q: String,
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubeSearchSuggestionsOptions {
+    /// Creates options with the required values.
+    pub fn new(q: impl Into<String>) -> Self {
+        Self {
+            q: q.into(),
+            freshness: None,
+            request_options: RequestOptions::default(),
+        }
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.require("q", &self.q)?;
+        query.push("freshness", &self.freshness);
+        Ok(query)
+    }
+}
+
+/// Typed result of `youtube.search.suggestions.list`.
+pub type YouTubeSearchSuggestionsResponse = Response<Vec<YouTubeSuggestion>>;
+
+/// Options for `youtube.trending.posts.list`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubeTrendingPostsOptions {
+    /// Two-letter ISO 3166 country code. The default is US.
+    pub country: Option<String>,
+    /// Trending category. One of `now`, `music`, `games`, or `movies`.
+    pub category: Option<String>,
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubeTrendingPostsOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Two-letter ISO 3166 country code. The default is US.
+    pub fn country(mut self, value: impl Into<String>) -> Self {
+        self.country = Some(value.into());
+        self
+    }
+
+    /// Trending category. One of `now`, `music`, `games`, or `movies`.
+    pub fn category(mut self, value: impl Into<String>) -> Self {
+        self.category = Some(value.into());
+        self
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("country", &self.country);
+        query.push("category", &self.category);
+        query.push("freshness", &self.freshness);
+        Ok(query)
+    }
+}
+
+/// Typed result of `youtube.trending.posts.list`.
+pub type YouTubeTrendingPostsResponse = Response<Vec<YouTubePost>>;

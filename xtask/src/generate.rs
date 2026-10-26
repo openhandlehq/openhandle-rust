@@ -1214,6 +1214,7 @@ fn display_name(name: &str) -> String {
         "twitter" => "X (Twitter)".to_owned(),
         "instagram" => "Instagram".to_owned(),
         "reddit" => "Reddit".to_owned(),
+        "youtube" => "YouTube".to_owned(),
         "testData" => "Test data catalog".to_owned(),
         _ => snake_case(name).replace('_', " "),
     }
@@ -1249,6 +1250,7 @@ fn optional(inner: String) -> String {
 pub fn pascal_case(value: &str) -> String {
     match value {
         "tiktok" => return "TikTok".to_owned(),
+        "youtube" => return "YouTube".to_owned(),
         "oembed" => return "OEmbed".to_owned(),
         _ => {}
     }

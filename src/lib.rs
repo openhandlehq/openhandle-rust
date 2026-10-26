@@ -1,5 +1,5 @@
 //! The official Rust client for the Openhandle API. It reads public
-//! Instagram, TikTok, X, and Reddit data.
+//! Instagram, TikTok, X, Reddit, and YouTube data.
 //!
 //! Every call follows one grammar:
 //!

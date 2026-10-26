@@ -1259,5 +1259,291 @@ pub(crate) async fn call_every_operation(
         .await
         .map(|_| ()),
     ));
+    results.push((
+        "youtube.charts.artists.list",
+        Box::pin(client.youtube().charts().artists().list(None))
+            .await
+            .map(|_| ()),
+    ));
+    results.push((
+        "youtube.charts.tracks.list",
+        Box::pin(client.youtube().charts().tracks().list(None))
+            .await
+            .map(|_| ()),
+    ));
+    results.push((
+        "youtube.charts.videos.list",
+        Box::pin(client.youtube().charts().videos().list(None))
+            .await
+            .map(|_| ()),
+    ));
+    results.push((
+        "youtube.communityPost.comments.list",
+        Box::pin(
+            client
+                .youtube()
+                .community_post(crate::Id::new("sample-identifier"))
+                .comments()
+                .list(None),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.communityPost.get",
+        Box::pin(
+            client
+                .youtube()
+                .community_post(crate::Id::new("sample-identifier"))
+                .get(None),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.hashtag.posts.list",
+        Box::pin(
+            client
+                .youtube()
+                .hashtag(crate::Id::new("sample-identifier"))
+                .posts()
+                .list(None),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.playlist.posts.list",
+        Box::pin(
+            client
+                .youtube()
+                .playlist(crate::Id::new("sample-identifier"))
+                .posts()
+                .list(None),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.post.comment.replies.list",
+        Box::pin(
+            client
+                .youtube()
+                .post(crate::Id::new("sample-identifier"))
+                .comment(crate::Id::new("sample-comment_id"))
+                .replies()
+                .list(crate::YouTubePostCommentRepliesOptions::new("sample-token")),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.post.comments.list",
+        Box::pin(
+            client
+                .youtube()
+                .post(crate::Id::new("sample-identifier"))
+                .comments()
+                .list(None),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.post.get",
+        Box::pin(
+            client
+                .youtube()
+                .post(crate::Id::new("sample-identifier"))
+                .get(None),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.post.related.list",
+        Box::pin(
+            client
+                .youtube()
+                .post(crate::Id::new("sample-identifier"))
+                .related()
+                .list(None),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.post.soundPosts.list",
+        Box::pin(
+            client
+                .youtube()
+                .post(crate::Id::new("sample-identifier"))
+                .sound_posts()
+                .list(None),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.post.transcript.get",
+        Box::pin(
+            client
+                .youtube()
+                .post(crate::Id::new("sample-identifier"))
+                .transcript()
+                .get(None),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.profile.communityPosts.list",
+        Box::pin(
+            client
+                .youtube()
+                .profile(crate::Id::new("sample-identifier"))
+                .community_posts()
+                .list(None),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.profile.get",
+        Box::pin(
+            client
+                .youtube()
+                .profile(crate::Id::new("sample-identifier"))
+                .get(None),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.profile.livestreams.list",
+        Box::pin(
+            client
+                .youtube()
+                .profile(crate::Id::new("sample-identifier"))
+                .livestreams()
+                .list(None),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.profile.playlists.list",
+        Box::pin(
+            client
+                .youtube()
+                .profile(crate::Id::new("sample-identifier"))
+                .playlists()
+                .list(None),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.profile.products.list",
+        Box::pin(
+            client
+                .youtube()
+                .profile(crate::Id::new("sample-identifier"))
+                .products()
+                .list(None),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.profile.search.list",
+        Box::pin(
+            client
+                .youtube()
+                .profile(crate::Id::new("sample-identifier"))
+                .search()
+                .list(crate::YouTubeProfileSearchOptions::new("sample-q")),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.profile.shorts.list",
+        Box::pin(
+            client
+                .youtube()
+                .profile(crate::Id::new("sample-identifier"))
+                .shorts()
+                .list(None),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.profile.videos.list",
+        Box::pin(
+            client
+                .youtube()
+                .profile(crate::Id::new("sample-identifier"))
+                .videos()
+                .list(None),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.search.playlists.list",
+        Box::pin(
+            client
+                .youtube()
+                .search()
+                .playlists()
+                .list(crate::YouTubeSearchPlaylistsOptions::new("sample-q")),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.search.posts.list",
+        Box::pin(
+            client
+                .youtube()
+                .search()
+                .posts()
+                .list(crate::YouTubeSearchPostsOptions::new("sample-q")),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.search.profiles.list",
+        Box::pin(
+            client
+                .youtube()
+                .search()
+                .profiles()
+                .list(crate::YouTubeSearchProfilesOptions::new("sample-q")),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.search.suggestions.list",
+        Box::pin(
+            client
+                .youtube()
+                .search()
+                .suggestions()
+                .list(crate::YouTubeSearchSuggestionsOptions::new("sample-q")),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.trending.posts.list",
+        Box::pin(client.youtube().trending().posts().list(None))
+            .await
+            .map(|_| ()),
+    ));
     results
 }
