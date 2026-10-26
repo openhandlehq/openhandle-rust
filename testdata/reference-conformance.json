@@ -341,6 +341,236 @@
         "value": "https://redd.it/abc123"
       },
       "error": "reference_mismatch"
+    },
+    {
+      "name": "YouTube raw handle",
+      "platform": "youtube",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "MrBeast"
+      },
+      "identifier": "@MrBeast"
+    },
+    {
+      "name": "YouTube explicit handle",
+      "platform": "youtube",
+      "resource": "profile",
+      "input": {
+        "kind": "username",
+        "value": "@MrBeast"
+      },
+      "identifier": "@MrBeast"
+    },
+    {
+      "name": "YouTube Unicode handle",
+      "platform": "youtube",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "@café.tv"
+      },
+      "identifier": "@café.tv"
+    },
+    {
+      "name": "YouTube explicit channel ID",
+      "platform": "youtube",
+      "resource": "profile",
+      "input": {
+        "kind": "id",
+        "value": "UCX6OQ3DkcsbYNE6H8uQQuVA"
+      },
+      "identifier": "UCX6OQ3DkcsbYNE6H8uQQuVA"
+    },
+    {
+      "name": "YouTube handle URL",
+      "platform": "youtube",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "https://www.youtube.com/@MrBeast"
+      },
+      "identifier": "@MrBeast"
+    },
+    {
+      "name": "YouTube handle tab URL",
+      "platform": "youtube",
+      "resource": "profile",
+      "input": {
+        "kind": "url",
+        "value": "https://m.youtube.com/@MrBeast/videos"
+      },
+      "identifier": "@MrBeast"
+    },
+    {
+      "name": "YouTube Unicode handle URL",
+      "platform": "youtube",
+      "resource": "profile",
+      "input": {
+        "kind": "url",
+        "value": "https://www.youtube.com/@café.tv/shorts"
+      },
+      "identifier": "@café.tv"
+    },
+    {
+      "name": "YouTube channel URL",
+      "platform": "youtube",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "https://www.youtube.com/channel/UCX6OQ3DkcsbYNE6H8uQQuVA"
+      },
+      "identifier": "UCX6OQ3DkcsbYNE6H8uQQuVA"
+    },
+    {
+      "name": "YouTube raw video ID",
+      "platform": "youtube",
+      "resource": "post",
+      "input": {
+        "kind": "raw",
+        "value": "dQw4w9WgXcQ"
+      },
+      "identifier": "dQw4w9WgXcQ"
+    },
+    {
+      "name": "YouTube watch URL",
+      "platform": "youtube",
+      "resource": "post",
+      "input": {
+        "kind": "url",
+        "value": "https://www.youtube.com/watch?v=dQw4w9WgXcQ&t=42s"
+      },
+      "identifier": "dQw4w9WgXcQ"
+    },
+    {
+      "name": "YouTube Music watch URL",
+      "platform": "youtube",
+      "resource": "post",
+      "input": {
+        "kind": "raw",
+        "value": "https://music.youtube.com/watch?v=dQw4w9WgXcQ"
+      },
+      "identifier": "dQw4w9WgXcQ"
+    },
+    {
+      "name": "YouTube short link",
+      "platform": "youtube",
+      "resource": "post",
+      "input": {
+        "kind": "raw",
+        "value": "https://youtu.be/dQw4w9WgXcQ"
+      },
+      "identifier": "dQw4w9WgXcQ"
+    },
+    {
+      "name": "YouTube Shorts URL",
+      "platform": "youtube",
+      "resource": "post",
+      "input": {
+        "kind": "raw",
+        "value": "youtube.com/shorts/aqz-KE-bpKQ"
+      },
+      "identifier": "aqz-KE-bpKQ"
+    },
+    {
+      "name": "YouTube live URL",
+      "platform": "youtube",
+      "resource": "post",
+      "input": {
+        "kind": "url",
+        "value": "https://www.youtube.com/live/dQw4w9WgXcQ"
+      },
+      "identifier": "dQw4w9WgXcQ"
+    },
+    {
+      "name": "YouTube embed URL",
+      "platform": "youtube",
+      "resource": "post",
+      "input": {
+        "kind": "url",
+        "value": "https://www.youtube.com/embed/dQw4w9WgXcQ"
+      },
+      "identifier": "dQw4w9WgXcQ"
+    },
+    {
+      "name": "YouTube raw playlist ID",
+      "platform": "youtube",
+      "resource": "playlist",
+      "input": {
+        "kind": "raw",
+        "value": "PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf"
+      },
+      "identifier": "PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf"
+    },
+    {
+      "name": "YouTube profile rejects video URL",
+      "platform": "youtube",
+      "resource": "profile",
+      "input": {
+        "kind": "url",
+        "value": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      },
+      "error": "reference_mismatch"
+    },
+    {
+      "name": "YouTube raw profile rejects Shorts URL",
+      "platform": "youtube",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "https://www.youtube.com/shorts/aqz-KE-bpKQ"
+      },
+      "error": "reference_mismatch"
+    },
+    {
+      "name": "YouTube post rejects channel URL",
+      "platform": "youtube",
+      "resource": "post",
+      "input": {
+        "kind": "url",
+        "value": "https://www.youtube.com/channel/UCX6OQ3DkcsbYNE6H8uQQuVA"
+      },
+      "error": "reference_mismatch"
+    },
+    {
+      "name": "YouTube watch URL without a video ID",
+      "platform": "youtube",
+      "resource": "post",
+      "input": {
+        "kind": "url",
+        "value": "https://www.youtube.com/watch?list=PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf"
+      },
+      "error": "invalid_reference"
+    },
+    {
+      "name": "YouTube unsupported URL",
+      "platform": "youtube",
+      "resource": "profile",
+      "input": {
+        "kind": "url",
+        "value": "https://www.youtube.com/results?search_query=openai"
+      },
+      "error": "invalid_reference"
+    },
+    {
+      "name": "YouTube raw unsupported URL does not fall back",
+      "platform": "youtube",
+      "resource": "profile",
+      "input": {
+        "kind": "raw",
+        "value": "https://www.youtube.com/c/MrBeast"
+      },
+      "error": "invalid_reference"
+    },
+    {
+      "name": "YouTube invalid handle",
+      "platform": "youtube",
+      "resource": "profile",
+      "input": {
+        "kind": "username",
+        "value": "@not a handle"
+      },
+      "error": "invalid_reference"
     }
   ]
 }

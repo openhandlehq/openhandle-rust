@@ -5,6 +5,7 @@ use reqwest::Url as ParsedUrl;
 use crate::errors::{Error, ReferenceError, ReferenceMismatchError};
 
 mod reddit;
+mod youtube;
 
 #[cfg(test)]
 mod conformance;
@@ -247,7 +248,11 @@ fn looks_like_supported_social_url(value: &str) -> bool {
 fn supported_social_host(host: &str) -> bool {
     matches!(
         host,
-        "reddit.com"
+        "youtube.com"
+            | "m.youtube.com"
+            | "music.youtube.com"
+            | "youtu.be"
+            | "reddit.com"
             | "old.reddit.com"
             | "new.reddit.com"
             | "m.reddit.com"
@@ -266,6 +271,7 @@ fn supported_social_host(host: &str) -> bool {
 fn username_reference(value: &str, platform: &str) -> Result<String, Error> {
     let username = value.strip_prefix('@').unwrap_or(value);
     let valid = match platform {
+        "youtube" => youtube::is_youtube_handle(username),
         "reddit" => is_reddit_name(username),
         "instagram" => is_instagram_name(username),
         "tiktok" => is_tiktok_name(username),
@@ -319,6 +325,9 @@ fn resolve_social_url(input: &str) -> Result<SocialUrlResolution, Error> {
         .into());
     }
     match host {
+        "youtube.com" | "m.youtube.com" | "music.youtube.com" | "youtu.be" => {
+            youtube::resolve_youtube_url(host, &parsed, &parts)
+        }
         "reddit.com" | "old.reddit.com" | "new.reddit.com" | "m.reddit.com" | "redd.it" => {
             reddit::resolve_reddit_url(host, &parts)
         }
@@ -450,7 +459,7 @@ fn percent_decode(value: &str) -> Option<String> {
     Some(String::from_utf8_lossy(&decoded).into_owned())
 }
 
-fn matches_class(
+pub(crate) fn matches_class(
     value: &str,
     minimum: usize,
     maximum: usize,

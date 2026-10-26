@@ -3818,10 +3818,17 @@ pub struct ResponseCursors {
 pub struct ResponseMeta {
     /// The `cashtags` field.
     pub cashtags: Option<Vec<serde_json::Value>>,
+    /// The `category` field.
+    pub category: Option<String>,
     /// The `chart` field.
     pub chart: Option<Box<TikTokChartMetadata>>,
+    /// The `chartWeek` field.
+    #[serde(rename = "chartWeek")]
+    pub chart_week: Option<Box<YouTubeChartWeek>>,
     /// The `collection` field.
     pub collection: Option<Box<InstagramStoryCollection>>,
+    /// The `comments` field.
+    pub comments: Option<i64>,
     /// The `community` field.
     pub community: Option<Box<RedditCommunityHandle>>,
     /// The `context` field.
@@ -3830,11 +3837,16 @@ pub struct ResponseMeta {
     pub continuation: Option<Box<TikTokPageContinuation>>,
     /// The `count` field.
     pub count: Option<i64>,
+    /// The `country` field.
+    pub country: Option<String>,
     /// The `cursors` field.
     #[serde(deserialize_with = "crate::de::null_as_default")]
     pub cursors: Box<ResponseCursors>,
     /// The `domain` field.
     pub domain: Option<String>,
+    /// The `estimatedResults` field.
+    #[serde(rename = "estimatedResults")]
+    pub estimated_results: Option<i64>,
     /// The `events` field.
     pub events: Option<Vec<serde_json::Value>>,
     /// The `handle` field.
@@ -3851,6 +3863,8 @@ pub struct ResponseMeta {
     /// The `hasMoreBefore` field.
     #[serde(rename = "hasMoreBefore")]
     pub has_more_before: Option<bool>,
+    /// The `hashtag` field.
+    pub hashtag: Option<Box<YouTubeHashtag>>,
     /// The `hashtags` field.
     pub hashtags: Option<Vec<serde_json::Value>>,
     /// The `isLimited` field.
@@ -3873,6 +3887,8 @@ pub struct ResponseMeta {
     pub next_cursor_type: Option<String>,
     /// The `parent` field.
     pub parent: Option<Box<InstagramCommentReference>>,
+    /// The `playlist` field.
+    pub playlist: Option<Box<YouTubePlaylistReference>>,
     /// The `previousCursor` field.
     #[serde(rename = "previousCursor")]
     pub previous_cursor: Option<String>,
@@ -8028,6 +8044,683 @@ pub struct TwitterWithheld {
     pub description: Option<String>,
     /// The `scope` field.
     pub scope: Option<String>,
+}
+
+/// The `YouTubeAudioTrack` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeAudioTrack {
+    /// The `language` field.
+    pub language: Option<String>,
+    /// The `name` field.
+    pub name: Option<String>,
+}
+
+/// The `YouTubeAuthor` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeAuthor {
+    /// The `avatar` field.
+    pub avatar: Option<Box<YouTubeImage>>,
+    /// The `displayName` field.
+    #[serde(rename = "displayName")]
+    pub display_name: Option<String>,
+    /// The `handle` field.
+    pub handle: Option<String>,
+    /// The `id` field.
+    pub id: Option<String>,
+    /// The `isArtist` field.
+    #[serde(rename = "isArtist")]
+    pub is_artist: Option<bool>,
+    /// The `isVerified` field.
+    #[serde(rename = "isVerified")]
+    pub is_verified: Option<bool>,
+}
+
+/// The `YouTubeChartArtist` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeChartArtist {
+    /// The `id` field.
+    pub id: Option<String>,
+    /// The `name` field.
+    pub name: Option<String>,
+}
+
+/// The `YouTubeChartEntry` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeChartEntry {
+    /// The `artists` field.
+    pub artists: Option<Vec<YouTubeChartArtist>>,
+    /// The `channel` field.
+    pub channel: Option<Box<YouTubeAuthor>>,
+    /// The `duration` field.
+    pub duration: Option<i64>,
+    /// The `id` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub id: String,
+    /// The `label` field.
+    pub label: Option<String>,
+    /// The `metrics` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub metrics: Box<YouTubeChartMetrics>,
+    /// The `postId` field.
+    #[serde(rename = "postId")]
+    pub post_id: Option<String>,
+    /// The `rank` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub rank: Box<YouTubeChartRank>,
+    /// The `releaseDate` field.
+    #[serde(rename = "releaseDate")]
+    pub release_date: Option<String>,
+    /// The `thumbnail` field.
+    pub thumbnail: Option<Box<YouTubeImage>>,
+    /// The `title` field.
+    pub title: Option<String>,
+    /// The `type` field.
+    pub r#type: Option<String>,
+    /// The `url` field.
+    pub url: Option<String>,
+}
+
+/// The `YouTubeChartMetrics` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeChartMetrics {
+    /// The `views` field.
+    pub views: Option<i64>,
+}
+
+/// The `YouTubeChartRank` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeChartRank {
+    /// The `position` field.
+    pub position: Option<i64>,
+    /// The `previousPosition` field.
+    #[serde(rename = "previousPosition")]
+    pub previous_position: Option<i64>,
+    /// The `viewsChange` field.
+    #[serde(rename = "viewsChange")]
+    pub views_change: Option<f64>,
+    /// The `weeksOnChart` field.
+    #[serde(rename = "weeksOnChart")]
+    pub weeks_on_chart: Option<i64>,
+}
+
+/// The `YouTubeChartWeek` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeChartWeek {
+    /// The `country` field.
+    pub country: Option<String>,
+    /// The `endDate` field.
+    #[serde(rename = "endDate")]
+    pub end_date: Option<String>,
+    /// The `startDate` field.
+    #[serde(rename = "startDate")]
+    pub start_date: Option<String>,
+}
+
+/// The `YouTubeComment` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeComment {
+    /// The `approximateCreatedAt` field.
+    #[serde(rename = "approximateCreatedAt")]
+    pub approximate_created_at: Option<chrono::DateTime<chrono::Utc>>,
+    /// The `author` field.
+    pub author: Option<Box<YouTubeAuthor>>,
+    /// The `createdAt` field.
+    #[serde(rename = "createdAt")]
+    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    /// The `createdAtLabel` field.
+    #[serde(rename = "createdAtLabel")]
+    pub created_at_label: Option<String>,
+    /// The `extracted` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub extracted: Box<YouTubeExtracted>,
+    /// The `id` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub id: String,
+    /// The `isByPostAuthor` field.
+    #[serde(rename = "isByPostAuthor")]
+    pub is_by_post_author: Option<bool>,
+    /// The `isEdited` field.
+    #[serde(rename = "isEdited")]
+    pub is_edited: Option<bool>,
+    /// The `metrics` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub metrics: Box<YouTubeCommentMetrics>,
+    /// The `parentId` field.
+    #[serde(rename = "parentId")]
+    pub parent_id: Option<String>,
+    /// The `postId` field.
+    #[serde(rename = "postId")]
+    pub post_id: Option<String>,
+    /// The `repliesToken` field.
+    #[serde(rename = "repliesToken")]
+    pub replies_token: Option<String>,
+    /// The `text` field.
+    pub text: Option<String>,
+    /// The `url` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub url: String,
+}
+
+/// The `YouTubeCommentMetrics` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeCommentMetrics {
+    /// The `isApproximate` field.
+    #[serde(rename = "isApproximate")]
+    pub is_approximate: Option<bool>,
+    /// The `likes` field.
+    pub likes: Option<i64>,
+    /// The `replies` field.
+    pub replies: Option<i64>,
+}
+
+/// The `YouTubeCommunityPost` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeCommunityPost {
+    /// The `approximateCreatedAt` field.
+    #[serde(rename = "approximateCreatedAt")]
+    pub approximate_created_at: Option<chrono::DateTime<chrono::Utc>>,
+    /// The `author` field.
+    pub author: Option<Box<YouTubeAuthor>>,
+    /// The `createdAt` field.
+    #[serde(rename = "createdAt")]
+    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    /// The `createdAtLabel` field.
+    #[serde(rename = "createdAtLabel")]
+    pub created_at_label: Option<String>,
+    /// The `extracted` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub extracted: Box<YouTubeExtracted>,
+    /// The `id` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub id: String,
+    /// The `images` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub images: Vec<YouTubeImage>,
+    /// The `metrics` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub metrics: Box<YouTubeCommunityPostMetrics>,
+    /// The `poll` field.
+    pub poll: Option<Box<YouTubePoll>>,
+    /// The `text` field.
+    pub text: Option<String>,
+    /// The `url` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub url: String,
+}
+
+/// The `YouTubeCommunityPostMetrics` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeCommunityPostMetrics {
+    /// The `comments` field.
+    pub comments: Option<i64>,
+    /// The `isApproximate` field.
+    #[serde(rename = "isApproximate")]
+    pub is_approximate: Option<bool>,
+    /// The `likes` field.
+    pub likes: Option<i64>,
+}
+
+/// The `YouTubeExtracted` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeExtracted {
+    /// The `emails` field.
+    pub emails: Option<Vec<String>>,
+    /// The `handles` field.
+    pub handles: Option<Vec<YouTubeExtractedHandle>>,
+    /// The `links` field.
+    pub links: Option<Vec<String>>,
+    /// The `phones` field.
+    pub phones: Option<Vec<String>>,
+}
+
+/// The `YouTubeExtractedHandle` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeExtractedHandle {
+    /// The `handle` field.
+    pub handle: Option<String>,
+    /// The `platform` field.
+    pub platform: Option<String>,
+}
+
+/// The `YouTubeHashtag` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeHashtag {
+    /// The `label` field.
+    pub label: Option<String>,
+    /// The `name` field.
+    pub name: Option<String>,
+}
+
+/// The `YouTubeImage` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeImage {
+    /// The `height` field.
+    pub height: Option<i64>,
+    /// The `renditions` field.
+    pub renditions: Option<Vec<YouTubeImage>>,
+    /// The `url` field.
+    pub url: Option<String>,
+    /// The `width` field.
+    pub width: Option<i64>,
+}
+
+/// The `YouTubeLink` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeLink {
+    /// The `title` field.
+    pub title: Option<String>,
+    /// The `url` field.
+    pub url: Option<String>,
+}
+
+/// The `YouTubeMusicCredit` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeMusicCredit {
+    /// The `album` field.
+    pub album: Option<String>,
+    /// The `artists` field.
+    pub artists: Option<Vec<String>>,
+    /// The `title` field.
+    pub title: Option<String>,
+}
+
+/// The `YouTubePageMetadata` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubePageMetadata {
+    /// The `category` field.
+    pub category: Option<String>,
+    /// The `chartWeek` field.
+    #[serde(rename = "chartWeek")]
+    pub chart_week: Option<Box<YouTubeChartWeek>>,
+    /// The `comments` field.
+    pub comments: Option<i64>,
+    /// The `country` field.
+    pub country: Option<String>,
+    /// The `estimatedResults` field.
+    #[serde(rename = "estimatedResults")]
+    pub estimated_results: Option<i64>,
+    /// The `hashtag` field.
+    pub hashtag: Option<Box<YouTubeHashtag>>,
+    /// The `playlist` field.
+    pub playlist: Option<Box<YouTubePlaylistReference>>,
+    /// The `query` field.
+    pub query: Option<String>,
+}
+
+/// The `YouTubePlaylist` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubePlaylist {
+    /// The `approximateUpdatedAt` field.
+    #[serde(rename = "approximateUpdatedAt")]
+    pub approximate_updated_at: Option<chrono::DateTime<chrono::Utc>>,
+    /// The `author` field.
+    pub author: Option<Box<YouTubeAuthor>>,
+    /// The `firstPostId` field.
+    #[serde(rename = "firstPostId")]
+    pub first_post_id: Option<String>,
+    /// The `id` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub id: String,
+    /// The `metrics` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub metrics: Box<YouTubePlaylistMetrics>,
+    /// The `text` field.
+    pub text: Option<String>,
+    /// The `thumbnail` field.
+    pub thumbnail: Option<Box<YouTubeImage>>,
+    /// The `title` field.
+    pub title: Option<String>,
+    /// The `type` field.
+    pub r#type: Option<String>,
+    /// The `updatedAtLabel` field.
+    #[serde(rename = "updatedAtLabel")]
+    pub updated_at_label: Option<String>,
+    /// The `url` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub url: String,
+}
+
+/// The `YouTubePlaylistMetrics` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubePlaylistMetrics {
+    /// The `isApproximate` field.
+    #[serde(rename = "isApproximate")]
+    pub is_approximate: Option<bool>,
+    /// The `videos` field.
+    pub videos: Option<i64>,
+    /// The `views` field.
+    pub views: Option<i64>,
+}
+
+/// The `YouTubePlaylistReference` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubePlaylistReference {
+    /// The `approximateUpdatedAt` field.
+    #[serde(rename = "approximateUpdatedAt")]
+    pub approximate_updated_at: Option<chrono::DateTime<chrono::Utc>>,
+    /// The `author` field.
+    pub author: Option<Box<YouTubeAuthor>>,
+    /// The `firstPostId` field.
+    #[serde(rename = "firstPostId")]
+    pub first_post_id: Option<String>,
+    /// The `id` field.
+    pub id: Option<String>,
+    /// The `metrics` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub metrics: Box<YouTubePlaylistMetrics>,
+    /// The `text` field.
+    pub text: Option<String>,
+    /// The `thumbnail` field.
+    pub thumbnail: Option<Box<YouTubeImage>>,
+    /// The `title` field.
+    pub title: Option<String>,
+    /// The `type` field.
+    pub r#type: Option<String>,
+    /// The `updatedAtLabel` field.
+    #[serde(rename = "updatedAtLabel")]
+    pub updated_at_label: Option<String>,
+    /// The `url` field.
+    pub url: Option<String>,
+}
+
+/// The `YouTubePoll` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubePoll {
+    /// The `choices` field.
+    pub choices: Option<Vec<String>>,
+    /// The `votes` field.
+    pub votes: Option<i64>,
+}
+
+/// The `YouTubePost` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubePost {
+    /// The `approximateCreatedAt` field.
+    #[serde(rename = "approximateCreatedAt")]
+    pub approximate_created_at: Option<chrono::DateTime<chrono::Utc>>,
+    /// The `audioTracks` field.
+    #[serde(rename = "audioTracks")]
+    pub audio_tracks: Option<Vec<YouTubeAudioTrack>>,
+    /// The `author` field.
+    pub author: Option<Box<YouTubeAuthor>>,
+    /// The `category` field.
+    pub category: Option<String>,
+    /// The `createdAt` field.
+    #[serde(rename = "createdAt")]
+    pub created_at: Option<chrono::DateTime<chrono::Utc>>,
+    /// The `createdAtLabel` field.
+    #[serde(rename = "createdAtLabel")]
+    pub created_at_label: Option<String>,
+    /// The `duration` field.
+    pub duration: Option<i64>,
+    /// The `extracted` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub extracted: Box<YouTubeExtracted>,
+    /// The `hasCaptions` field.
+    #[serde(rename = "hasCaptions")]
+    pub has_captions: Option<bool>,
+    /// The `hashtags` field.
+    pub hashtags: Option<Vec<String>>,
+    /// The `id` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub id: String,
+    /// The `isEmbeddable` field.
+    #[serde(rename = "isEmbeddable")]
+    pub is_embeddable: Option<bool>,
+    /// The `isFamilySafe` field.
+    #[serde(rename = "isFamilySafe")]
+    pub is_family_safe: Option<bool>,
+    /// The `isLiveNow` field.
+    #[serde(rename = "isLiveNow")]
+    pub is_live_now: Option<bool>,
+    /// The `isLiveStream` field.
+    #[serde(rename = "isLiveStream")]
+    pub is_live_stream: Option<bool>,
+    /// The `isUnlisted` field.
+    #[serde(rename = "isUnlisted")]
+    pub is_unlisted: Option<bool>,
+    /// The `keywords` field.
+    pub keywords: Option<Vec<String>>,
+    /// The `language` field.
+    pub language: Option<String>,
+    /// The `liveStartedAt` field.
+    #[serde(rename = "liveStartedAt")]
+    pub live_started_at: Option<chrono::DateTime<chrono::Utc>>,
+    /// The `metrics` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub metrics: Box<YouTubePostMetrics>,
+    /// The `music` field.
+    pub music: Option<Vec<YouTubeMusicCredit>>,
+    /// The `preview` field.
+    pub preview: Option<Box<YouTubeImage>>,
+    /// The `subtitles` field.
+    pub subtitles: Option<Vec<YouTubeSubtitle>>,
+    /// The `text` field.
+    pub text: Option<String>,
+    /// The `thumbnail` field.
+    pub thumbnail: Option<Box<YouTubeImage>>,
+    /// The `title` field.
+    pub title: Option<String>,
+    /// The `type` field.
+    pub r#type: Option<String>,
+    /// The `url` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub url: String,
+}
+
+/// The `YouTubePostMetrics` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubePostMetrics {
+    /// The `comments` field.
+    pub comments: Option<i64>,
+    /// The `isApproximate` field.
+    #[serde(rename = "isApproximate")]
+    pub is_approximate: Option<bool>,
+    /// The `likes` field.
+    pub likes: Option<i64>,
+    /// The `views` field.
+    pub views: Option<i64>,
+    /// The `watching` field.
+    pub watching: Option<i64>,
+}
+
+/// The `YouTubeProduct` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeProduct {
+    /// The `image` field.
+    pub image: Option<Box<YouTubeImage>>,
+    /// The `merchant` field.
+    pub merchant: Option<String>,
+    /// The `price` field.
+    pub price: Option<String>,
+    /// The `priceLabel` field.
+    #[serde(rename = "priceLabel")]
+    pub price_label: Option<String>,
+    /// The `shelf` field.
+    pub shelf: Option<String>,
+    /// The `title` field.
+    pub title: Option<String>,
+    /// The `url` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub url: String,
+}
+
+/// The `YouTubeProfile` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeProfile {
+    /// The `avatar` field.
+    pub avatar: Option<Box<YouTubeImage>>,
+    /// The `banner` field.
+    pub banner: Option<Box<YouTubeImage>>,
+    /// The `bio` field.
+    pub bio: Option<String>,
+    /// The `country` field.
+    pub country: Option<String>,
+    /// The `displayName` field.
+    #[serde(rename = "displayName")]
+    pub display_name: Option<String>,
+    /// The `extracted` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub extracted: Box<YouTubeExtracted>,
+    /// The `handle` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub handle: String,
+    /// The `hasBusinessEmail` field.
+    #[serde(rename = "hasBusinessEmail")]
+    pub has_business_email: Option<bool>,
+    /// The `id` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub id: String,
+    /// The `isFamilySafe` field.
+    #[serde(rename = "isFamilySafe")]
+    pub is_family_safe: Option<bool>,
+    /// The `joinedAt` field.
+    #[serde(rename = "joinedAt")]
+    pub joined_at: Option<chrono::DateTime<chrono::Utc>>,
+    /// The `keywords` field.
+    pub keywords: Option<Vec<String>>,
+    /// The `links` field.
+    pub links: Option<Vec<YouTubeLink>>,
+    /// The `metrics` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub metrics: Box<YouTubeProfileMetrics>,
+    /// The `url` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub url: String,
+}
+
+/// The `YouTubeProfileMetrics` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeProfileMetrics {
+    /// The `isApproximate` field.
+    #[serde(rename = "isApproximate")]
+    pub is_approximate: Option<bool>,
+    /// The `subscribers` field.
+    pub subscribers: Option<i64>,
+    /// The `videos` field.
+    pub videos: Option<i64>,
+    /// The `views` field.
+    pub views: Option<i64>,
+}
+
+/// The `YouTubeSegment` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeSegment {
+    /// The `end` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub end: i64,
+    /// The `start` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub start: i64,
+    /// The `text` field.
+    pub text: Option<String>,
+}
+
+/// The `YouTubeSubtitle` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeSubtitle {
+    /// The `isAutoGenerated` field.
+    #[serde(rename = "isAutoGenerated")]
+    pub is_auto_generated: Option<bool>,
+    /// The `isTranslatable` field.
+    #[serde(rename = "isTranslatable")]
+    pub is_translatable: Option<bool>,
+    /// The `language` field.
+    pub language: Option<String>,
+    /// The `name` field.
+    pub name: Option<String>,
+}
+
+/// The `YouTubeSuggestion` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeSuggestion {
+    /// The `text` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub text: String,
+}
+
+/// The `YouTubeTranscript` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeTranscript {
+    /// The `isAutoGenerated` field.
+    #[serde(rename = "isAutoGenerated")]
+    pub is_auto_generated: Option<bool>,
+    /// The `language` field.
+    pub language: Option<String>,
+    /// The `languageName` field.
+    #[serde(rename = "languageName")]
+    pub language_name: Option<String>,
+    /// The `languages` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub languages: Vec<YouTubeSubtitle>,
+    /// The `postId` field.
+    #[serde(rename = "postId", deserialize_with = "crate::de::null_as_default")]
+    pub post_id: String,
+    /// The `segments` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub segments: Vec<YouTubeSegment>,
 }
 
 /// The `ErrorEnvelopeError` model.
