@@ -1362,6 +1362,18 @@ pub(crate) async fn call_every_operation(
         .map(|_| ()),
     ));
     results.push((
+        "youtube.post.frame.get",
+        Box::pin(
+            client
+                .youtube()
+                .post(crate::Id::new("sample-identifier"))
+                .frame()
+                .get(crate::YouTubePostFrameOptions::new(1)),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
         "youtube.post.get",
         Box::pin(
             client
@@ -1392,6 +1404,18 @@ pub(crate) async fn call_every_operation(
                 .post(crate::Id::new("sample-identifier"))
                 .sound_posts()
                 .list(None),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
+        "youtube.post.storyboard.get",
+        Box::pin(
+            client
+                .youtube()
+                .post(crate::Id::new("sample-identifier"))
+                .storyboard()
+                .get(None),
         )
         .await
         .map(|_| ()),

@@ -8366,6 +8366,35 @@ pub struct YouTubeFiles {
     pub renditions: Vec<YouTubeFileRendition>,
 }
 
+/// The `YouTubeFrame` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeFrame {
+    /// The `at` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub at: i64,
+    /// The `postId` field.
+    #[serde(rename = "postId", deserialize_with = "crate::de::null_as_default")]
+    pub post_id: String,
+    /// The `renditions` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub renditions: Vec<YouTubeFrameRendition>,
+}
+
+/// The `YouTubeFrameRendition` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeFrameRendition {
+    /// The `height` field.
+    pub height: Option<i64>,
+    /// The `quality` field.
+    pub quality: Option<String>,
+    /// The `url` field.
+    pub url: Option<String>,
+}
+
 /// The `YouTubeHashtag` model.
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[serde(default)]
@@ -8728,6 +8757,88 @@ pub struct YouTubeSegment {
     pub start: i64,
     /// The `text` field.
     pub text: Option<String>,
+}
+
+/// The `YouTubeStoryboard` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeStoryboard {
+    /// The `author` field.
+    pub author: Option<Box<YouTubeAuthor>>,
+    /// The `columns` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub columns: i64,
+    /// The `frameCount` field.
+    #[serde(rename = "frameCount", deserialize_with = "crate::de::null_as_default")]
+    pub frame_count: i64,
+    /// The `frameHeight` field.
+    #[serde(
+        rename = "frameHeight",
+        deserialize_with = "crate::de::null_as_default"
+    )]
+    pub frame_height: i64,
+    /// The `frameWidth` field.
+    #[serde(rename = "frameWidth", deserialize_with = "crate::de::null_as_default")]
+    pub frame_width: i64,
+    /// The `frames` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub frames: Vec<YouTubeStoryboardFrame>,
+    /// The `intervalMs` field.
+    #[serde(rename = "intervalMs", deserialize_with = "crate::de::null_as_default")]
+    pub interval_ms: i64,
+    /// The `postId` field.
+    #[serde(rename = "postId", deserialize_with = "crate::de::null_as_default")]
+    pub post_id: String,
+    /// The `rows` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub rows: i64,
+    /// The `sheets` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub sheets: Vec<YouTubeStoryboardSheet>,
+}
+
+/// The `YouTubeStoryboardFrame` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeStoryboardFrame {
+    /// The `sheet` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub sheet: i64,
+    /// The `timeMs` field.
+    #[serde(rename = "timeMs", deserialize_with = "crate::de::null_as_default")]
+    pub time_ms: i64,
+    /// The `x` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub x: i64,
+    /// The `y` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub y: i64,
+}
+
+/// The `YouTubeStoryboardSheet` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeStoryboardSheet {
+    /// The `frameCount` field.
+    #[serde(rename = "frameCount", deserialize_with = "crate::de::null_as_default")]
+    pub frame_count: i64,
+    /// The `height` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub height: i64,
+    /// The `index` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub index: i64,
+    /// The `startMs` field.
+    #[serde(rename = "startMs", deserialize_with = "crate::de::null_as_default")]
+    pub start_ms: i64,
+    /// The `url` field.
+    pub url: Option<String>,
+    /// The `width` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub width: i64,
 }
 
 /// The `YouTubeSubtitle` model.

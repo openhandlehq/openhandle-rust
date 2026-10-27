@@ -11510,7 +11510,9 @@
               "transcript",
               "product",
               "chart",
-              "files"
+              "files",
+              "storyboard",
+              "frame"
             ],
             "type": "string"
           },
@@ -11662,7 +11664,9 @@
               "transcript",
               "product",
               "chart",
-              "files"
+              "files",
+              "storyboard",
+              "frame"
             ],
             "type": "string"
           },
@@ -11796,7 +11800,9 @@
               "transcript",
               "product",
               "chart",
-              "files"
+              "files",
+              "storyboard",
+              "frame"
             ],
             "type": "string"
           },
@@ -22968,6 +22974,62 @@
         ],
         "type": "object"
       },
+      "YouTubeFrame": {
+        "additionalProperties": false,
+        "properties": {
+          "at": {
+            "type": "integer"
+          },
+          "postId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "renditions": {
+            "items": {
+              "$ref": "#/components/schemas/YouTubeFrameRendition"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "postId",
+          "at",
+          "renditions"
+        ],
+        "type": "object"
+      },
+      "YouTubeFrameRendition": {
+        "additionalProperties": false,
+        "properties": {
+          "height": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "quality": {
+            "minLength": 1,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "url": {
+            "format": "uri",
+            "minLength": 1,
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "quality",
+          "height",
+          "url"
+        ],
+        "type": "object"
+      },
       "YouTubeHashtag": {
         "additionalProperties": false,
         "properties": {
@@ -23947,6 +24009,129 @@
         ],
         "type": "object"
       },
+      "YouTubeStoryboard": {
+        "additionalProperties": false,
+        "properties": {
+          "author": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/YouTubeAuthor"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "columns": {
+            "type": "integer"
+          },
+          "frameCount": {
+            "type": "integer"
+          },
+          "frameHeight": {
+            "type": "integer"
+          },
+          "frameWidth": {
+            "type": "integer"
+          },
+          "frames": {
+            "items": {
+              "$ref": "#/components/schemas/YouTubeStoryboardFrame"
+            },
+            "type": "array"
+          },
+          "intervalMs": {
+            "type": "integer"
+          },
+          "postId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "rows": {
+            "type": "integer"
+          },
+          "sheets": {
+            "items": {
+              "$ref": "#/components/schemas/YouTubeStoryboardSheet"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "postId",
+          "author",
+          "intervalMs",
+          "frameWidth",
+          "frameHeight",
+          "columns",
+          "rows",
+          "frameCount",
+          "sheets",
+          "frames"
+        ],
+        "type": "object"
+      },
+      "YouTubeStoryboardFrame": {
+        "additionalProperties": false,
+        "properties": {
+          "sheet": {
+            "type": "integer"
+          },
+          "timeMs": {
+            "type": "integer"
+          },
+          "x": {
+            "type": "integer"
+          },
+          "y": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "timeMs",
+          "sheet",
+          "x",
+          "y"
+        ],
+        "type": "object"
+      },
+      "YouTubeStoryboardSheet": {
+        "additionalProperties": false,
+        "properties": {
+          "frameCount": {
+            "type": "integer"
+          },
+          "height": {
+            "type": "integer"
+          },
+          "index": {
+            "type": "integer"
+          },
+          "startMs": {
+            "type": "integer"
+          },
+          "url": {
+            "format": "uri",
+            "minLength": 1,
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "width": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "index",
+          "url",
+          "width",
+          "height",
+          "startMs",
+          "frameCount"
+        ],
+        "type": "object"
+      },
       "YouTubeSubtitle": {
         "additionalProperties": false,
         "properties": {
@@ -24083,7 +24268,7 @@
   "info": {
     "description": "Read public social data through one API contract. API keys starting with oh_test_ use the deterministic synthetic dataset and record a $0.000 actual charge. Keys starting with oh_live_, plus legacy oh_ keys, use real public data and normal billing. Do not send an environment parameter or header.",
     "title": "Openhandle API",
-    "version": "1.2.8"
+    "version": "1.2.9"
   },
   "openapi": "3.1.0",
   "paths": {
@@ -25062,8 +25247,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.comment.likers.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "comment": "synthetic comment",
             "identifier": "910100000001",
@@ -25942,8 +26127,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.hashtag.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "syntheticvolume",
             "query": "synthetic"
@@ -26930,8 +27115,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.hashtag.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "syntheticvolume",
             "query": "synthetic"
@@ -27903,8 +28088,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.hashtag.reels.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "910100000001"
           }
@@ -28780,8 +28965,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.highlight.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "comment": "synthetic comment",
             "identifier": "910100000001",
@@ -29660,8 +29845,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.location.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "950000000002",
             "query": "synthetic"
@@ -30648,8 +30833,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.location.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "950000000002",
             "query": "synthetic"
@@ -31526,8 +31711,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.music.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "950000000003",
             "query": "synthetic"
@@ -32499,8 +32684,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.music.stream.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "comment": "synthetic comment",
             "identifier": "910100000001",
@@ -33379,8 +33564,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.post.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "910100000001"
           }
@@ -34259,8 +34444,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.post.clip.metadata.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "comment": "synthetic comment",
             "identifier": "910100000001",
@@ -35142,8 +35327,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.post.comment.metadata.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "comment": "synthetic comment",
             "identifier": "910100000001",
@@ -36036,8 +36221,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.post.comment.moderation.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "comment": "synthetic comment",
             "identifier": "910100000001",
@@ -37011,8 +37196,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.post.comments.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "910100000001"
           }
@@ -37999,8 +38184,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.comment.replies.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "comment_id": "910200000001",
             "identifier": "910100000001",
@@ -38881,8 +39066,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.post.insights.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "comment": "synthetic comment",
             "identifier": "910100000001",
@@ -39856,8 +40041,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.post.likers.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "910100000001"
           }
@@ -40736,8 +40921,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.post.oembed.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "comment": "synthetic comment",
             "identifier": "910100000001",
@@ -41711,8 +41896,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.post.tagged.users.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "910100000001"
           }
@@ -42591,8 +42776,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.post.template.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "comment": "synthetic comment",
             "identifier": "910100000001",
@@ -43471,8 +43656,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.profile.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@northstar_forge_test"
           }
@@ -44351,8 +44536,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.profile.about.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "comment": "synthetic comment",
             "identifier": "@northstar_forge_test",
@@ -45326,8 +45511,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.profile.business.recommendations.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "comment": "synthetic comment",
             "identifier": "@northstar_forge_test",
@@ -46301,8 +46486,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.profile.followers.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@northstar_forge_test"
           }
@@ -47284,8 +47469,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.profile.followers.search",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@northstar_forge_test",
             "query": "synthetic"
@@ -48257,8 +48442,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.profile.following.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@northstar_forge_test"
           }
@@ -49240,8 +49425,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.profile.following.search",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@northstar_forge_test",
             "query": "synthetic"
@@ -50213,8 +50398,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.profile.highlights.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "comment": "synthetic comment",
             "identifier": "@northstar_forge_test",
@@ -51188,8 +51373,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.profile.pinned.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@northstar_forge_test"
           }
@@ -52170,8 +52355,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.profile.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@northstar_forge_test"
           }
@@ -53142,8 +53327,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.profile.reels.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@northstar_forge_test"
           }
@@ -54114,8 +54299,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.profile.reposts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@northstar_forge_test"
           }
@@ -55086,8 +55271,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.profile.stories.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "comment": "synthetic comment",
             "identifier": "@northstar_forge_test",
@@ -56061,8 +56246,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.profile.suggested.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@northstar_forge_test"
           }
@@ -57033,8 +57218,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.profile.tagged.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@northstar_forge_test"
           }
@@ -58005,8 +58190,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.profile.videos.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@northstar_forge_test"
           }
@@ -58975,8 +59160,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.search.hashtags.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "query": "synthetic"
           }
@@ -59945,8 +60130,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.search.music.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "query": "synthetic"
           }
@@ -60915,8 +61100,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.search.places.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "query": "synthetic"
           }
@@ -61885,8 +62070,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.search.profiles.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "query": "synthetic"
           }
@@ -62855,8 +63040,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.search.reels.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "query": "synthetic"
           }
@@ -63825,8 +64010,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.search.top.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "comment": "synthetic comment",
             "media_id": "910100000001",
@@ -64704,8 +64889,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=instagram.story.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "comment": "synthetic comment",
             "identifier": "910100000001",
@@ -65728,8 +65913,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=reddit.domain.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "example.com",
             "page": "index",
@@ -66607,8 +66792,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=reddit.post.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "synthetic",
             "page": "index",
@@ -67536,8 +67721,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=reddit.post.comments.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "synthetic",
             "page": "index",
@@ -68523,8 +68708,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=reddit.post.duplicates.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "synthetic",
             "page": "index",
@@ -69402,8 +69587,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=reddit.profile.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@synthetic_reddit"
           }
@@ -70422,8 +70607,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=reddit.profile.comments.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@synthetic_reddit",
             "page": "index",
@@ -71307,8 +71492,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=reddit.profile.moderated.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@synthetic_reddit",
             "page": "index",
@@ -72329,8 +72514,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=reddit.profile.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@synthetic_reddit",
             "page": "index",
@@ -73214,8 +73399,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=reddit.profile.trophies.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@synthetic_reddit",
             "page": "index",
@@ -74245,8 +74430,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=reddit.search.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "page": "index",
             "query": "synthetic"
@@ -75229,8 +75414,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=reddit.search.profiles.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "page": "index",
             "query": "synthetic"
@@ -76213,8 +76398,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=reddit.search.subreddits.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "page": "index",
             "query": "synthetic"
@@ -77186,8 +77371,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=reddit.subreddits.new.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "handle": "synthetic_reddit",
             "id": "synthetic",
@@ -78162,8 +78347,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=reddit.subreddits.popular.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "handle": "synthetic_reddit",
             "id": "synthetic",
@@ -79043,8 +79228,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=reddit.subreddit.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "synthetic",
             "page": "index",
@@ -80066,8 +80251,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=reddit.subreddit.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "synthetic",
             "page": "index",
@@ -80951,8 +81136,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=reddit.subreddit.rules.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "synthetic",
             "page": "index",
@@ -81836,8 +82021,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=reddit.subreddit.wiki.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "synthetic",
             "page": "index",
@@ -82731,8 +82916,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=reddit.subreddit.wiki.page.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "synthetic",
             "page": "index",
@@ -83742,8 +83927,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=reddit.trending.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "handle": "synthetic_reddit",
             "id": "synthetic",
@@ -83799,7 +83984,9 @@
                 "transcript",
                 "product",
                 "chart",
-                "files"
+                "files",
+                "storyboard",
+                "frame"
               ],
               "type": "string"
             }
@@ -84902,8 +85089,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.effects.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "category_id": "950000000008",
             "comment": "synthetic",
@@ -85789,8 +85976,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.effect.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "category_id": "950000000008",
             "comment": "synthetic",
@@ -86772,8 +86959,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.effect.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "920100000000000001"
           }
@@ -87649,8 +87836,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.hashtag.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "950000000001",
             "query": "synthetic"
@@ -88622,8 +88809,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.hashtag.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "950000000001",
             "query": "synthetic"
@@ -89500,8 +89687,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.location.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "950000000002",
             "query": "synthetic"
@@ -90473,8 +90660,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.location.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "950000000002",
             "query": "synthetic"
@@ -91351,8 +91538,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.music.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "950000000003",
             "query": "synthetic"
@@ -92324,8 +92511,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.music.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "950000000003",
             "query": "synthetic"
@@ -93202,8 +93389,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.post.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "920100000000000001"
           }
@@ -94174,8 +94361,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.post.comments.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "920100000000000001"
           }
@@ -95162,8 +95349,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.comment.replies.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "comment_id": "920200000000000001",
             "identifier": "920100000000000001",
@@ -96041,8 +96228,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.profile.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@pixel_orchard_tt_test"
           }
@@ -97013,8 +97200,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.profile.followers.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@pixel_orchard_tt_test"
           }
@@ -97985,8 +98172,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.profile.following.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@pixel_orchard_tt_test"
           }
@@ -98957,8 +99144,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.profile.liked.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@pixel_orchard_tt_test"
           }
@@ -99929,8 +100116,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.profile.playlists.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "category_id": "950000000008",
             "comment": "synthetic",
@@ -100833,8 +101020,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.profile.playlist.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "category_id": "950000000008",
             "comment": "synthetic",
@@ -101832,8 +102019,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.profile.playlist.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@pixel_orchard_tt_test",
             "playlist_id": "950000000006"
@@ -102815,8 +103002,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.profile.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@pixel_orchard_tt_test"
           }
@@ -103785,8 +103972,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.search.hashtags.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "query": "synthetic"
           }
@@ -104755,8 +104942,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.search.locations.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "query": "synthetic"
           }
@@ -105725,8 +105912,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.search.music.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "query": "synthetic"
           }
@@ -106695,8 +106882,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.search.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "query": "synthetic"
           }
@@ -107665,8 +107852,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.search.profiles.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "query": "synthetic"
           }
@@ -108624,8 +108811,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.trending.categories.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "id": "950000000004",
             "query": ""
@@ -109584,8 +109771,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.trending.music.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "id": "950000000003",
             "q": "synthetic",
@@ -110545,8 +110732,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=tiktok.trending.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "handle": "pixel_orchard_tt_test",
             "id": "920100000000000001",
@@ -111521,8 +111708,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=twitter.list.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "950000000005"
           }
@@ -112398,8 +112585,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=twitter.post.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "940100000000000001"
           }
@@ -113370,8 +113557,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=twitter.post.comments.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "940100000000000001"
           }
@@ -114358,8 +114545,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=twitter.comment.replies.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "comment_id": "940200000000000001",
             "identifier": "940100000000000001",
@@ -115332,8 +115519,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=twitter.post.reposters.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "940100000000000001"
           }
@@ -116209,8 +116396,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=twitter.profile.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@copperfield_lab_x_test"
           }
@@ -117181,8 +117368,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=twitter.profile.followers.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@copperfield_lab_x_test"
           }
@@ -118153,8 +118340,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=twitter.profile.following.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@copperfield_lab_x_test"
           }
@@ -119125,8 +119312,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=twitter.profile.media.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@copperfield_lab_x_test"
           }
@@ -120107,8 +120294,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=twitter.profile.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@copperfield_lab_x_test"
           }
@@ -121079,8 +121266,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=twitter.profile.replies.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@copperfield_lab_x_test"
           }
@@ -122063,8 +122250,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=twitter.search.media.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "query": "synthetic"
           }
@@ -123048,8 +123235,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=twitter.search.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "query": "synthetic"
           }
@@ -124018,8 +124205,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=twitter.search.suggestions.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "query": "synthetic"
           }
@@ -124988,8 +125175,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=twitter.search.users.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "query": "synthetic"
           }
@@ -127058,8 +127245,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.charts.artists.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "id": "",
             "q": "",
@@ -127940,8 +128127,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.charts.tracks.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "id": "",
             "q": "",
@@ -128822,8 +129009,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.charts.videos.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "id": "",
             "q": "",
@@ -129701,8 +129888,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.community.post.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "Ugsynthpost001"
           }
@@ -130688,8 +130875,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.community.post.comments.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "Ugsynthpost001"
           }
@@ -131660,8 +131847,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.hashtag.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "synthetic"
           }
@@ -132632,8 +132819,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.playlist.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "PLsynthetic001"
           }
@@ -133509,8 +133696,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.post.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "synthvid001"
           }
@@ -134496,8 +134683,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.post.comments.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "synthvid001"
           }
@@ -135495,8 +135682,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.post.comment.replies.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "comment_id": "Ugsynthcomment001",
             "identifier": "synthvid001",
@@ -136377,9 +136564,902 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.post.files.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
+            "identifier": "synthvid001"
+          }
+        }
+      }
+    },
+    "/v1/youtube/posts/{identifier}/frame": {
+      "get": {
+        "description": "Return one still frame of a public video at a time in seconds, in every resolution the video has. Test and Live use the same route, parameters, response schema, pagination, and errors. In Test, null means unavailable, not zero.",
+        "operationId": "Youtube_post_frame_get",
+        "parameters": [
+          {
+            "description": "Public resource reference. Profile paths accept a username with an @ prefix, such as @openai, or the stable platform ID. Post paths accept the platform post ID or shortcode.",
+            "example": "synthvid001",
+            "in": "path",
+            "name": "identifier",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "description": "Time of the frame in whole seconds from the start of the video.",
+            "example": "43",
+            "in": "query",
+            "name": "at",
+            "required": true,
+            "schema": {
+              "maximum": 359999,
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Maximum accepted data age. The default is 24h.",
+            "example": "24h",
+            "in": "query",
+            "name": "freshness",
+            "required": false,
+            "schema": {
+              "default": "24h",
+              "enum": [
+                "live",
+                "24h",
+                "7d",
+                "30d"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SuccessEnvelope"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/YouTubeFrame"
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "A successful Test or Live response.",
+            "headers": {
+              "Openhandle-Billing-Disposition": {
+                "description": "Accounting disposition.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "allowance",
+                    "free",
+                    "prepaid"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-Cost": {
+                "description": "Authoritative actual customer charge. Always 0.000 for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Dataset-Version": {
+                "description": "Synthetic dataset version. Present for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Environment": {
+                "description": "Environment selected by the API key.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "live"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-List-Price": {
+                "description": "Live-equivalent price for the source and freshness that answered. A cache hit shows the cache price.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit": {
+                "description": "Remaining requests (r) and seconds until reset (t) for each evaluated policy. May be absent before authentication or when the limiter is unavailable.",
+                "example": "\"key\";r=9;t=1, \"organization\";r=49;t=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Policy": {
+                "description": "Quota policies for the evaluated limits. Present after rate-limit evaluation. Uses draft-ietf-httpapi-ratelimit-headers-11.",
+                "example": "\"key\";q=10;w=1, \"organization\";q=50;w=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds to wait before retrying a throttled request. Present on 429 responses.",
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Stable request identifier.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "The locator, cursor, or query is invalid.",
+            "headers": {
+              "Openhandle-Billing-Disposition": {
+                "description": "Accounting disposition.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "allowance",
+                    "free",
+                    "prepaid"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-Cost": {
+                "description": "Authoritative actual customer charge. Always 0.000 for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Dataset-Version": {
+                "description": "Synthetic dataset version. Present for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Environment": {
+                "description": "Environment selected by the API key.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "live"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-List-Price": {
+                "description": "Live-equivalent price for the source and freshness that answered. A cache hit shows the cache price.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit": {
+                "description": "Remaining requests (r) and seconds until reset (t) for each evaluated policy. May be absent before authentication or when the limiter is unavailable.",
+                "example": "\"key\";r=9;t=1, \"organization\";r=49;t=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Policy": {
+                "description": "Quota policies for the evaluated limits. Present after rate-limit evaluation. Uses draft-ietf-httpapi-ratelimit-headers-11.",
+                "example": "\"key\";q=10;w=1, \"organization\";q=50;w=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds to wait before retrying a throttled request. Present on 429 responses.",
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Stable request identifier.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "The API key is invalid.",
+            "headers": {
+              "Openhandle-Billing-Disposition": {
+                "description": "Accounting disposition.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "allowance",
+                    "free",
+                    "prepaid"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-Cost": {
+                "description": "Authoritative actual customer charge. Always 0.000 for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Dataset-Version": {
+                "description": "Synthetic dataset version. Present for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Environment": {
+                "description": "Environment selected by the API key.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "live"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-List-Price": {
+                "description": "Live-equivalent price for the source and freshness that answered. A cache hit shows the cache price.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit": {
+                "description": "Remaining requests (r) and seconds until reset (t) for each evaluated policy. May be absent before authentication or when the limiter is unavailable.",
+                "example": "\"key\";r=9;t=1, \"organization\";r=49;t=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Policy": {
+                "description": "Quota policies for the evaluated limits. Present after rate-limit evaluation. Uses draft-ietf-httpapi-ratelimit-headers-11.",
+                "example": "\"key\";q=10;w=1, \"organization\";q=50;w=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds to wait before retrying a throttled request. Present on 429 responses.",
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Stable request identifier.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "402": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Live billing does not permit this request.",
+            "headers": {
+              "Openhandle-Billing-Disposition": {
+                "description": "Accounting disposition.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "allowance",
+                    "free",
+                    "prepaid"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-Cost": {
+                "description": "Authoritative actual customer charge. Always 0.000 for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Dataset-Version": {
+                "description": "Synthetic dataset version. Present for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Environment": {
+                "description": "Environment selected by the API key.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "live"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-List-Price": {
+                "description": "Live-equivalent price for the source and freshness that answered. A cache hit shows the cache price.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit": {
+                "description": "Remaining requests (r) and seconds until reset (t) for each evaluated policy. May be absent before authentication or when the limiter is unavailable.",
+                "example": "\"key\";r=9;t=1, \"organization\";r=49;t=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Policy": {
+                "description": "Quota policies for the evaluated limits. Present after rate-limit evaluation. Uses draft-ietf-httpapi-ratelimit-headers-11.",
+                "example": "\"key\";q=10;w=1, \"organization\";q=50;w=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds to wait before retrying a throttled request. Present on 429 responses.",
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Stable request identifier.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "The resource is private or workspace API access is security-suspended.",
+            "headers": {
+              "Openhandle-Billing-Disposition": {
+                "description": "Accounting disposition.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "allowance",
+                    "free",
+                    "prepaid"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-Cost": {
+                "description": "Authoritative actual customer charge. Always 0.000 for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Dataset-Version": {
+                "description": "Synthetic dataset version. Present for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Environment": {
+                "description": "Environment selected by the API key.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "live"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-List-Price": {
+                "description": "Live-equivalent price for the source and freshness that answered. A cache hit shows the cache price.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit": {
+                "description": "Remaining requests (r) and seconds until reset (t) for each evaluated policy. May be absent before authentication or when the limiter is unavailable.",
+                "example": "\"key\";r=9;t=1, \"organization\";r=49;t=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Policy": {
+                "description": "Quota policies for the evaluated limits. Present after rate-limit evaluation. Uses draft-ietf-httpapi-ratelimit-headers-11.",
+                "example": "\"key\";q=10;w=1, \"organization\";q=50;w=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds to wait before retrying a throttled request. Present on 429 responses.",
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Stable request identifier.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "The resource does not exist.",
+            "headers": {
+              "Openhandle-Billing-Disposition": {
+                "description": "Accounting disposition.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "allowance",
+                    "free",
+                    "prepaid"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-Cost": {
+                "description": "Authoritative actual customer charge. Always 0.000 for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Dataset-Version": {
+                "description": "Synthetic dataset version. Present for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Environment": {
+                "description": "Environment selected by the API key.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "live"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-List-Price": {
+                "description": "Live-equivalent price for the source and freshness that answered. A cache hit shows the cache price.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit": {
+                "description": "Remaining requests (r) and seconds until reset (t) for each evaluated policy. May be absent before authentication or when the limiter is unavailable.",
+                "example": "\"key\";r=9;t=1, \"organization\";r=49;t=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Policy": {
+                "description": "Quota policies for the evaluated limits. Present after rate-limit evaluation. Uses draft-ietf-httpapi-ratelimit-headers-11.",
+                "example": "\"key\";q=10;w=1, \"organization\";q=50;w=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds to wait before retrying a throttled request. Present on 429 responses.",
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Stable request identifier.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "The request rate limit was exceeded.",
+            "headers": {
+              "Openhandle-Billing-Disposition": {
+                "description": "Accounting disposition.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "allowance",
+                    "free",
+                    "prepaid"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-Cost": {
+                "description": "Authoritative actual customer charge. Always 0.000 for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Dataset-Version": {
+                "description": "Synthetic dataset version. Present for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Environment": {
+                "description": "Environment selected by the API key.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "live"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-List-Price": {
+                "description": "Live-equivalent price for the source and freshness that answered. A cache hit shows the cache price.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit": {
+                "description": "Remaining requests (r) and seconds until reset (t) for each evaluated policy. May be absent before authentication or when the limiter is unavailable.",
+                "example": "\"key\";r=9;t=1, \"organization\";r=49;t=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Policy": {
+                "description": "Quota policies for the evaluated limits. Present after rate-limit evaluation. Uses draft-ietf-httpapi-ratelimit-headers-11.",
+                "example": "\"key\";q=10;w=1, \"organization\";q=50;w=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds to wait before retrying a throttled request. Present on 429 responses.",
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Stable request identifier.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "451": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "The owner of this profile asked Openhandle not to serve it.",
+            "headers": {
+              "Openhandle-Billing-Disposition": {
+                "description": "Accounting disposition.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "allowance",
+                    "free",
+                    "prepaid"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-Cost": {
+                "description": "Authoritative actual customer charge. Always 0.000 for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Dataset-Version": {
+                "description": "Synthetic dataset version. Present for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Environment": {
+                "description": "Environment selected by the API key.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "live"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-List-Price": {
+                "description": "Live-equivalent price for the source and freshness that answered. A cache hit shows the cache price.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit": {
+                "description": "Remaining requests (r) and seconds until reset (t) for each evaluated policy. May be absent before authentication or when the limiter is unavailable.",
+                "example": "\"key\";r=9;t=1, \"organization\";r=49;t=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Policy": {
+                "description": "Quota policies for the evaluated limits. Present after rate-limit evaluation. Uses draft-ietf-httpapi-ratelimit-headers-11.",
+                "example": "\"key\";q=10;w=1, \"organization\";q=50;w=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds to wait before retrying a throttled request. Present on 429 responses.",
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Stable request identifier.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "The request failed internally.",
+            "headers": {
+              "Openhandle-Billing-Disposition": {
+                "description": "Accounting disposition.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "allowance",
+                    "free",
+                    "prepaid"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-Cost": {
+                "description": "Authoritative actual customer charge. Always 0.000 for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Dataset-Version": {
+                "description": "Synthetic dataset version. Present for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Environment": {
+                "description": "Environment selected by the API key.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "live"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-List-Price": {
+                "description": "Live-equivalent price for the source and freshness that answered. A cache hit shows the cache price.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit": {
+                "description": "Remaining requests (r) and seconds until reset (t) for each evaluated policy. May be absent before authentication or when the limiter is unavailable.",
+                "example": "\"key\";r=9;t=1, \"organization\";r=49;t=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Policy": {
+                "description": "Quota policies for the evaluated limits. Present after rate-limit evaluation. Uses draft-ietf-httpapi-ratelimit-headers-11.",
+                "example": "\"key\";q=10;w=1, \"organization\";q=50;w=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds to wait before retrying a throttled request. Present on 429 responses.",
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Stable request identifier.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "The service is temporarily unavailable.",
+            "headers": {
+              "Openhandle-Billing-Disposition": {
+                "description": "Accounting disposition.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "allowance",
+                    "free",
+                    "prepaid"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-Cost": {
+                "description": "Authoritative actual customer charge. Always 0.000 for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Dataset-Version": {
+                "description": "Synthetic dataset version. Present for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Environment": {
+                "description": "Environment selected by the API key.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "live"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-List-Price": {
+                "description": "Live-equivalent price for the source and freshness that answered. A cache hit shows the cache price.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit": {
+                "description": "Remaining requests (r) and seconds until reset (t) for each evaluated policy. May be absent before authentication or when the limiter is unavailable.",
+                "example": "\"key\";r=9;t=1, \"organization\";r=49;t=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Policy": {
+                "description": "Quota policies for the evaluated limits. Present after rate-limit evaluation. Uses draft-ietf-httpapi-ratelimit-headers-11.",
+                "example": "\"key\";q=10;w=1, \"organization\";q=50;w=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds to wait before retrying a throttled request. Present on 429 responses.",
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Stable request identifier.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OpenhandleKey": []
+          }
+        ],
+        "summary": "Get post frame",
+        "tags": [
+          "YouTube",
+          "Frame"
+        ],
+        "x-openhandle-operation": "youtube.post.frame.get",
+        "x-openhandle-sdk": {
+          "operation": "get",
+          "paginated": false,
+          "path": "youtube.post.frame.get",
+          "scope": [
+            {
+              "name": "youtube"
+            },
+            {
+              "name": "post",
+              "parameter": "identifier",
+              "reference": "post"
+            },
+            {
+              "name": "frame"
+            }
+          ]
+        },
+        "x-openhandle-test-data": {
+          "catalogUrl": "/v1/test-data?operation=youtube.post.frame.get",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
+          "example": {
+            "at": "43",
             "identifier": "synthvid001"
           }
         }
@@ -137349,8 +138429,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.post.related.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "synthvid001"
           }
@@ -138321,8 +139401,888 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.post.sound.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
+          "example": {
+            "identifier": "synthvid001"
+          }
+        }
+      }
+    },
+    "/v1/youtube/posts/{identifier}/storyboard": {
+      "get": {
+        "description": "Return YouTube's preview frames of a public video: one small frame every few seconds, packed into image sheets, with the position of every frame. Test and Live use the same route, parameters, response schema, pagination, and errors. In Test, null means unavailable, not zero.",
+        "operationId": "Youtube_post_storyboard_get",
+        "parameters": [
+          {
+            "description": "Public resource reference. Profile paths accept a username with an @ prefix, such as @openai, or the stable platform ID. Post paths accept the platform post ID or shortcode.",
+            "example": "synthvid001",
+            "in": "path",
+            "name": "identifier",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "description": "Maximum accepted data age. The default is 24h.",
+            "example": "24h",
+            "in": "query",
+            "name": "freshness",
+            "required": false,
+            "schema": {
+              "default": "24h",
+              "enum": [
+                "live",
+                "24h",
+                "7d",
+                "30d"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/SuccessEnvelope"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "$ref": "#/components/schemas/YouTubeStoryboard"
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "A successful Test or Live response.",
+            "headers": {
+              "Openhandle-Billing-Disposition": {
+                "description": "Accounting disposition.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "allowance",
+                    "free",
+                    "prepaid"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-Cost": {
+                "description": "Authoritative actual customer charge. Always 0.000 for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Dataset-Version": {
+                "description": "Synthetic dataset version. Present for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Environment": {
+                "description": "Environment selected by the API key.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "live"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-List-Price": {
+                "description": "Live-equivalent price for the source and freshness that answered. A cache hit shows the cache price.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit": {
+                "description": "Remaining requests (r) and seconds until reset (t) for each evaluated policy. May be absent before authentication or when the limiter is unavailable.",
+                "example": "\"key\";r=9;t=1, \"organization\";r=49;t=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Policy": {
+                "description": "Quota policies for the evaluated limits. Present after rate-limit evaluation. Uses draft-ietf-httpapi-ratelimit-headers-11.",
+                "example": "\"key\";q=10;w=1, \"organization\";q=50;w=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds to wait before retrying a throttled request. Present on 429 responses.",
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Stable request identifier.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "The locator, cursor, or query is invalid.",
+            "headers": {
+              "Openhandle-Billing-Disposition": {
+                "description": "Accounting disposition.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "allowance",
+                    "free",
+                    "prepaid"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-Cost": {
+                "description": "Authoritative actual customer charge. Always 0.000 for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Dataset-Version": {
+                "description": "Synthetic dataset version. Present for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Environment": {
+                "description": "Environment selected by the API key.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "live"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-List-Price": {
+                "description": "Live-equivalent price for the source and freshness that answered. A cache hit shows the cache price.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit": {
+                "description": "Remaining requests (r) and seconds until reset (t) for each evaluated policy. May be absent before authentication or when the limiter is unavailable.",
+                "example": "\"key\";r=9;t=1, \"organization\";r=49;t=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Policy": {
+                "description": "Quota policies for the evaluated limits. Present after rate-limit evaluation. Uses draft-ietf-httpapi-ratelimit-headers-11.",
+                "example": "\"key\";q=10;w=1, \"organization\";q=50;w=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds to wait before retrying a throttled request. Present on 429 responses.",
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Stable request identifier.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "The API key is invalid.",
+            "headers": {
+              "Openhandle-Billing-Disposition": {
+                "description": "Accounting disposition.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "allowance",
+                    "free",
+                    "prepaid"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-Cost": {
+                "description": "Authoritative actual customer charge. Always 0.000 for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Dataset-Version": {
+                "description": "Synthetic dataset version. Present for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Environment": {
+                "description": "Environment selected by the API key.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "live"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-List-Price": {
+                "description": "Live-equivalent price for the source and freshness that answered. A cache hit shows the cache price.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit": {
+                "description": "Remaining requests (r) and seconds until reset (t) for each evaluated policy. May be absent before authentication or when the limiter is unavailable.",
+                "example": "\"key\";r=9;t=1, \"organization\";r=49;t=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Policy": {
+                "description": "Quota policies for the evaluated limits. Present after rate-limit evaluation. Uses draft-ietf-httpapi-ratelimit-headers-11.",
+                "example": "\"key\";q=10;w=1, \"organization\";q=50;w=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds to wait before retrying a throttled request. Present on 429 responses.",
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Stable request identifier.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "402": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "Live billing does not permit this request.",
+            "headers": {
+              "Openhandle-Billing-Disposition": {
+                "description": "Accounting disposition.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "allowance",
+                    "free",
+                    "prepaid"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-Cost": {
+                "description": "Authoritative actual customer charge. Always 0.000 for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Dataset-Version": {
+                "description": "Synthetic dataset version. Present for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Environment": {
+                "description": "Environment selected by the API key.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "live"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-List-Price": {
+                "description": "Live-equivalent price for the source and freshness that answered. A cache hit shows the cache price.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit": {
+                "description": "Remaining requests (r) and seconds until reset (t) for each evaluated policy. May be absent before authentication or when the limiter is unavailable.",
+                "example": "\"key\";r=9;t=1, \"organization\";r=49;t=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Policy": {
+                "description": "Quota policies for the evaluated limits. Present after rate-limit evaluation. Uses draft-ietf-httpapi-ratelimit-headers-11.",
+                "example": "\"key\";q=10;w=1, \"organization\";q=50;w=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds to wait before retrying a throttled request. Present on 429 responses.",
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Stable request identifier.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "The resource is private or workspace API access is security-suspended.",
+            "headers": {
+              "Openhandle-Billing-Disposition": {
+                "description": "Accounting disposition.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "allowance",
+                    "free",
+                    "prepaid"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-Cost": {
+                "description": "Authoritative actual customer charge. Always 0.000 for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Dataset-Version": {
+                "description": "Synthetic dataset version. Present for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Environment": {
+                "description": "Environment selected by the API key.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "live"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-List-Price": {
+                "description": "Live-equivalent price for the source and freshness that answered. A cache hit shows the cache price.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit": {
+                "description": "Remaining requests (r) and seconds until reset (t) for each evaluated policy. May be absent before authentication or when the limiter is unavailable.",
+                "example": "\"key\";r=9;t=1, \"organization\";r=49;t=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Policy": {
+                "description": "Quota policies for the evaluated limits. Present after rate-limit evaluation. Uses draft-ietf-httpapi-ratelimit-headers-11.",
+                "example": "\"key\";q=10;w=1, \"organization\";q=50;w=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds to wait before retrying a throttled request. Present on 429 responses.",
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Stable request identifier.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "The resource does not exist.",
+            "headers": {
+              "Openhandle-Billing-Disposition": {
+                "description": "Accounting disposition.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "allowance",
+                    "free",
+                    "prepaid"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-Cost": {
+                "description": "Authoritative actual customer charge. Always 0.000 for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Dataset-Version": {
+                "description": "Synthetic dataset version. Present for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Environment": {
+                "description": "Environment selected by the API key.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "live"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-List-Price": {
+                "description": "Live-equivalent price for the source and freshness that answered. A cache hit shows the cache price.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit": {
+                "description": "Remaining requests (r) and seconds until reset (t) for each evaluated policy. May be absent before authentication or when the limiter is unavailable.",
+                "example": "\"key\";r=9;t=1, \"organization\";r=49;t=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Policy": {
+                "description": "Quota policies for the evaluated limits. Present after rate-limit evaluation. Uses draft-ietf-httpapi-ratelimit-headers-11.",
+                "example": "\"key\";q=10;w=1, \"organization\";q=50;w=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds to wait before retrying a throttled request. Present on 429 responses.",
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Stable request identifier.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "The request rate limit was exceeded.",
+            "headers": {
+              "Openhandle-Billing-Disposition": {
+                "description": "Accounting disposition.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "allowance",
+                    "free",
+                    "prepaid"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-Cost": {
+                "description": "Authoritative actual customer charge. Always 0.000 for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Dataset-Version": {
+                "description": "Synthetic dataset version. Present for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Environment": {
+                "description": "Environment selected by the API key.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "live"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-List-Price": {
+                "description": "Live-equivalent price for the source and freshness that answered. A cache hit shows the cache price.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit": {
+                "description": "Remaining requests (r) and seconds until reset (t) for each evaluated policy. May be absent before authentication or when the limiter is unavailable.",
+                "example": "\"key\";r=9;t=1, \"organization\";r=49;t=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Policy": {
+                "description": "Quota policies for the evaluated limits. Present after rate-limit evaluation. Uses draft-ietf-httpapi-ratelimit-headers-11.",
+                "example": "\"key\";q=10;w=1, \"organization\";q=50;w=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds to wait before retrying a throttled request. Present on 429 responses.",
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Stable request identifier.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "451": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "The owner of this profile asked Openhandle not to serve it.",
+            "headers": {
+              "Openhandle-Billing-Disposition": {
+                "description": "Accounting disposition.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "allowance",
+                    "free",
+                    "prepaid"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-Cost": {
+                "description": "Authoritative actual customer charge. Always 0.000 for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Dataset-Version": {
+                "description": "Synthetic dataset version. Present for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Environment": {
+                "description": "Environment selected by the API key.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "live"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-List-Price": {
+                "description": "Live-equivalent price for the source and freshness that answered. A cache hit shows the cache price.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit": {
+                "description": "Remaining requests (r) and seconds until reset (t) for each evaluated policy. May be absent before authentication or when the limiter is unavailable.",
+                "example": "\"key\";r=9;t=1, \"organization\";r=49;t=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Policy": {
+                "description": "Quota policies for the evaluated limits. Present after rate-limit evaluation. Uses draft-ietf-httpapi-ratelimit-headers-11.",
+                "example": "\"key\";q=10;w=1, \"organization\";q=50;w=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds to wait before retrying a throttled request. Present on 429 responses.",
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Stable request identifier.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "The request failed internally.",
+            "headers": {
+              "Openhandle-Billing-Disposition": {
+                "description": "Accounting disposition.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "allowance",
+                    "free",
+                    "prepaid"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-Cost": {
+                "description": "Authoritative actual customer charge. Always 0.000 for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Dataset-Version": {
+                "description": "Synthetic dataset version. Present for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Environment": {
+                "description": "Environment selected by the API key.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "live"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-List-Price": {
+                "description": "Live-equivalent price for the source and freshness that answered. A cache hit shows the cache price.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit": {
+                "description": "Remaining requests (r) and seconds until reset (t) for each evaluated policy. May be absent before authentication or when the limiter is unavailable.",
+                "example": "\"key\";r=9;t=1, \"organization\";r=49;t=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Policy": {
+                "description": "Quota policies for the evaluated limits. Present after rate-limit evaluation. Uses draft-ietf-httpapi-ratelimit-headers-11.",
+                "example": "\"key\";q=10;w=1, \"organization\";q=50;w=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds to wait before retrying a throttled request. Present on 429 responses.",
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Stable request identifier.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "The service is temporarily unavailable.",
+            "headers": {
+              "Openhandle-Billing-Disposition": {
+                "description": "Accounting disposition.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "allowance",
+                    "free",
+                    "prepaid"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-Cost": {
+                "description": "Authoritative actual customer charge. Always 0.000 for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Dataset-Version": {
+                "description": "Synthetic dataset version. Present for Test.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Openhandle-Environment": {
+                "description": "Environment selected by the API key.",
+                "schema": {
+                  "enum": [
+                    "test",
+                    "live"
+                  ],
+                  "type": "string"
+                }
+              },
+              "Openhandle-List-Price": {
+                "description": "Live-equivalent price for the source and freshness that answered. A cache hit shows the cache price.",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit": {
+                "description": "Remaining requests (r) and seconds until reset (t) for each evaluated policy. May be absent before authentication or when the limiter is unavailable.",
+                "example": "\"key\";r=9;t=1, \"organization\";r=49;t=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "RateLimit-Policy": {
+                "description": "Quota policies for the evaluated limits. Present after rate-limit evaluation. Uses draft-ietf-httpapi-ratelimit-headers-11.",
+                "example": "\"key\";q=10;w=1, \"organization\";q=50;w=1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds to wait before retrying a throttled request. Present on 429 responses.",
+                "example": "1",
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "X-Request-ID": {
+                "description": "Stable request identifier.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OpenhandleKey": []
+          }
+        ],
+        "summary": "Get post storyboard",
+        "tags": [
+          "YouTube",
+          "Storyboard"
+        ],
+        "x-openhandle-operation": "youtube.post.storyboard.get",
+        "x-openhandle-sdk": {
+          "operation": "get",
+          "paginated": false,
+          "path": "youtube.post.storyboard.get",
+          "scope": [
+            {
+              "name": "youtube"
+            },
+            {
+              "name": "post",
+              "parameter": "identifier",
+              "reference": "post"
+            },
+            {
+              "name": "storyboard"
+            }
+          ]
+        },
+        "x-openhandle-test-data": {
+          "catalogUrl": "/v1/test-data?operation=youtube.post.storyboard.get",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "synthvid001"
           }
@@ -139211,8 +141171,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.post.transcript.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "synthvid001"
           }
@@ -140088,8 +142048,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.profile.get",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@synthetic_youtube"
           }
@@ -141060,8 +143020,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.profile.community.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@synthetic_youtube"
           }
@@ -142048,8 +144008,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.profile.livestreams.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@synthetic_youtube"
           }
@@ -143020,8 +144980,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.profile.playlists.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@synthetic_youtube"
           }
@@ -143992,8 +145952,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.profile.products.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@synthetic_youtube"
           }
@@ -144975,8 +146935,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.profile.search.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@synthetic_youtube",
             "query": "synthetic"
@@ -145964,8 +147924,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.profile.shorts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@synthetic_youtube"
           }
@@ -146962,8 +148922,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.profile.videos.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "identifier": "@synthetic_youtube"
           }
@@ -147932,8 +149892,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.search.playlists.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "query": "synthetic"
           }
@@ -148965,8 +150925,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.search.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "query": "synthetic"
           }
@@ -149935,8 +151895,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.search.profiles.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "query": "synthetic"
           }
@@ -150816,8 +152776,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.search.suggestions.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "query": "synthetic"
           }
@@ -151712,8 +153672,8 @@
         },
         "x-openhandle-test-data": {
           "catalogUrl": "/v1/test-data?operation=youtube.trending.posts.list",
-          "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-          "datasetVersion": "2026-10-27.1",
+          "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+          "datasetVersion": "2026-10-27.2",
           "example": {
             "id": "",
             "q": "",
@@ -151778,8 +153738,8 @@
   ],
   "x-openhandle-test-data": {
     "catalogUrl": "/v1/test-data",
-    "contentHash": "sha256:816de68130d18c2a90e840e4ac6885aec3d02c700f4699860eb075235a46c086",
-    "datasetVersion": "2026-10-27.1"
+    "contentHash": "sha256:7794275e0d6f248bb315a82bf631385a86ae70d2957dd815951fce7615602735",
+    "datasetVersion": "2026-10-27.2"
   },
   "x-openhandle-versioning-policy": "https://openhandle.dev/docs/versioning"
 }

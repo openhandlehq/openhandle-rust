@@ -917,14 +917,24 @@ impl ResourceWriter<'_> {
         } else {
             let arguments = required
                 .iter()
-                .map(|parameter| format!("{}: impl Into<String>", field_name(&parameter.name)))
+                .map(|parameter| {
+                    let field = field_name(&parameter.name);
+                    match option_value_type(parameter).as_str() {
+                        "String" => format!("{field}: impl Into<String>"),
+                        value_type => format!("{field}: {value_type}"),
+                    }
+                })
                 .collect::<Vec<_>>()
                 .join(", ");
             let assignments = required
                 .iter()
                 .map(|parameter| {
                     let field = field_name(&parameter.name);
-                    format!("{field}: {field}.into()")
+                    if option_value_type(parameter) == "String" {
+                        format!("{field}: {field}.into()")
+                    } else {
+                        field
+                    }
                 })
                 .collect::<Vec<_>>()
                 .join(", ");
@@ -938,10 +948,10 @@ impl ResourceWriter<'_> {
                 .join(", ");
             if required
                 .iter()
-                .any(|parameter| option_value_type(parameter) != "String")
+                .any(|parameter| !matches!(option_value_type(parameter).as_str(), "String" | "i64"))
             {
                 return Err(format!(
-                    "{options_type} has a required option that is not a string"
+                    "{options_type} has a required option that is neither a string nor an integer"
                 ));
             }
             (
@@ -1025,7 +1035,13 @@ fn generate_surface(
                 let arguments = types
                     .required
                     .iter()
-                    .map(|parameter| format!("\"sample-{}\"", parameter.name))
+                    .map(|parameter| {
+                        if option_value_type(parameter) == "String" {
+                            format!("\"sample-{}\"", parameter.name)
+                        } else {
+                            "1".to_owned()
+                        }
+                    })
                     .collect::<Vec<_>>()
                     .join(", ");
                 format!("crate::{options_type}::new({arguments})")
