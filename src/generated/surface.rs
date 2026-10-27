@@ -1350,6 +1350,18 @@ pub(crate) async fn call_every_operation(
         .map(|_| ()),
     ));
     results.push((
+        "youtube.post.files.get",
+        Box::pin(
+            client
+                .youtube()
+                .post(crate::Id::new("sample-identifier"))
+                .files()
+                .get(None),
+        )
+        .await
+        .map(|_| ()),
+    ));
+    results.push((
         "youtube.post.get",
         Box::pin(
             client

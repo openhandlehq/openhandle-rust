@@ -102,3 +102,31 @@ async fn fetch_decodes_a_youtube_profile_and_post_by_resource() {
     };
     assert_eq!(post.id, "dQw4w9WgXcQ");
 }
+
+#[tokio::test]
+async fn post_files_decode_every_stream() {
+    let server = MockServer::start(|_, _| {
+        MockResponse::json(
+            r#"{"platform":"youtube","resource":"files","data":{"postId":"dQw4w9WgXcQ","author":null,"duration":213,"renditions":[{"itag":140,"quality":"audio","mimeType":"audio/mp4","hasVideo":false,"hasAudio":true,"size":3449447,"url":"https://media.openhandle.dev/b"}]}}"#,
+        )
+    })
+    .await;
+
+    let files = client(&server)
+        .youtube()
+        .post("https://www.youtube.com/shorts/dQw4w9WgXcQ")
+        .files()
+        .get(None)
+        .await
+        .expect("post files");
+
+    assert_eq!(
+        server.requests()[0].path,
+        "/v1/youtube/posts/dQw4w9WgXcQ/files"
+    );
+    assert_eq!(files.data.post_id, "dQw4w9WgXcQ");
+    let audio = &files.data.renditions[0];
+    assert_eq!(audio.itag, 140);
+    assert!(audio.has_audio && !audio.has_video);
+    assert_eq!(audio.size, Some(3449447));
+}
