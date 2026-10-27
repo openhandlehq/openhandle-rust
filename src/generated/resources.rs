@@ -6285,6 +6285,13 @@ impl YouTubePostResource {
         }
     }
 
+    /// Selects the frame resources. This never sends a request.
+    pub fn frame(&self) -> YouTubePostFrameResource {
+        YouTubePostFrameResource {
+            scope: self.scope.clone(),
+        }
+    }
+
     /// Selects the related resources. This never sends a request.
     pub fn related(&self) -> YouTubePostRelatedResource {
         YouTubePostRelatedResource {
@@ -6295,6 +6302,13 @@ impl YouTubePostResource {
     /// Selects the sound posts resources. This never sends a request.
     pub fn sound_posts(&self) -> YouTubePostSoundPostsResource {
         YouTubePostSoundPostsResource {
+            scope: self.scope.clone(),
+        }
+    }
+
+    /// Selects the storyboard resources. This never sends a request.
+    pub fn storyboard(&self) -> YouTubePostStoryboardResource {
+        YouTubePostStoryboardResource {
             scope: self.scope.clone(),
         }
     }
@@ -6470,6 +6484,38 @@ impl YouTubePostFilesResource {
     }
 }
 
+/// The `youtube.post.frame` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubePostFrameResource {
+    scope: Scope,
+}
+
+impl YouTubePostFrameResource {
+    /// Get post frame.
+    ///
+    /// Return one still frame of a public video at a time in seconds, in every
+    /// resolution the video has. Test and Live use the same route, parameters, response
+    /// schema, pagination, and errors. In Test, null means unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/posts/{identifier}/frame`
+    pub async fn get(
+        &self,
+        options: YouTubePostFrameOptions,
+    ) -> Result<YouTubePostFrameResponse, Error> {
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/posts/{identifier}/frame",
+                options.query(),
+                options.request_options,
+            )?
+            .send()
+            .await
+    }
+}
+
 /// The `youtube.post.related` resources.
 ///
 /// Selecting a resource never sends a request. Only its terminal operations do.
@@ -6561,6 +6607,40 @@ impl YouTubePostSoundPostsResource {
             options.query(),
             options.request_options,
         ))
+    }
+}
+
+/// The `youtube.post.storyboard` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubePostStoryboardResource {
+    scope: Scope,
+}
+
+impl YouTubePostStoryboardResource {
+    /// Get post storyboard.
+    ///
+    /// Return YouTube's preview frames of a public video: one small frame every few
+    /// seconds, packed into image sheets, with the position of every frame. Test and
+    /// Live use the same route, parameters, response schema, pagination, and errors. In
+    /// Test, null means unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/posts/{identifier}/storyboard`
+    pub async fn get(
+        &self,
+        options: impl Into<Option<YouTubePostStoryboardOptions>>,
+    ) -> Result<YouTubePostStoryboardResponse, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/posts/{identifier}/storyboard",
+                options.query(),
+                options.request_options,
+            )?
+            .send()
+            .await
     }
 }
 
@@ -10880,7 +10960,7 @@ pub struct TestDataOptions {
     /// Provider-specific public-data filter for this operation. One of `profile`,
     /// `post`, `comment`, `hashtag`, `location`, `music`, `category`, `list`, `entity`,
     /// `subreddit`, `rule`, `wiki`, `trophy`, `playlist`, `transcript`, `product`,
-    /// `chart`, or `files`.
+    /// `chart`, `files`, `storyboard`, or `frame`.
     pub resource: Option<String>,
     /// Provider-specific public-data filter for this operation.
     pub operation: Option<String>,
@@ -10913,7 +10993,7 @@ impl TestDataOptions {
     /// Provider-specific public-data filter for this operation. One of `profile`,
     /// `post`, `comment`, `hashtag`, `location`, `music`, `category`, `list`, `entity`,
     /// `subreddit`, `rule`, `wiki`, `trophy`, `playlist`, `transcript`, `product`,
-    /// `chart`, or `files`.
+    /// `chart`, `files`, `storyboard`, or `frame`.
     pub fn resource(mut self, value: impl Into<String>) -> Self {
         self.resource = Some(value.into());
         self
@@ -13916,6 +13996,58 @@ impl YouTubePostFilesOptions {
 /// Typed result of `youtube.post.files.get`.
 pub type YouTubePostFilesResponse = Response<YouTubeFiles>;
 
+/// Options for `youtube.post.frame.get`.
+#[derive(Clone, Debug, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubePostFrameOptions {
+    /// Time of the frame in whole seconds from the start of the video. Accepts 0 to
+    /// 359999.
+    pub at: i64,
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubePostFrameOptions {
+    /// Creates options with the required values.
+    pub fn new(at: i64) -> Self {
+        Self {
+            at,
+            freshness: None,
+            request_options: RequestOptions::default(),
+        }
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.require("at", &self.at)?;
+        query.push("freshness", &self.freshness);
+        Ok(query)
+    }
+}
+
+/// Typed result of `youtube.post.frame.get`.
+pub type YouTubePostFrameResponse = Response<YouTubeFrame>;
+
 /// Options for `youtube.post.related.list`.
 #[derive(Clone, Debug, Default, PartialEq)]
 #[non_exhaustive]
@@ -14021,6 +14153,50 @@ impl YouTubePostSoundPostsOptions {
 
 /// One page returned by `youtube.post.soundPosts.list`.
 pub type YouTubePostSoundPostsPage = Page<YouTubePost>;
+
+/// Options for `youtube.post.storyboard.get`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubePostStoryboardOptions {
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubePostStoryboardOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("freshness", &self.freshness);
+        Ok(query)
+    }
+}
+
+/// Typed result of `youtube.post.storyboard.get`.
+pub type YouTubePostStoryboardResponse = Response<YouTubeStoryboard>;
 
 /// Options for `youtube.post.transcript.get`.
 #[derive(Clone, Debug, Default, PartialEq)]

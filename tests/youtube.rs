@@ -1,6 +1,8 @@
 mod support;
 
-use openhandle::{Client, Error, FetchResource, Url, YouTubePostCommentRepliesOptions};
+use openhandle::{
+    Client, Error, FetchResource, Url, YouTubePostCommentRepliesOptions, YouTubePostFrameOptions,
+};
 use support::{MockResponse, MockServer};
 
 fn client(server: &MockServer) -> Client {
@@ -129,4 +131,53 @@ async fn post_files_decode_every_stream() {
     assert_eq!(audio.itag, 140);
     assert!(audio.has_audio && !audio.has_video);
     assert_eq!(audio.size, Some(3449447));
+}
+
+#[tokio::test]
+async fn post_storyboard_decodes_sheets_and_frame_positions() {
+    let server = MockServer::start(|_, _| {
+        MockResponse::json(
+            r#"{"platform":"youtube","resource":"storyboard","data":{"postId":"dQw4w9WgXcQ","author":null,"intervalMs":2000,"frameWidth":160,"frameHeight":90,"columns":5,"rows":5,"frameCount":2,"sheets":[{"index":0,"url":"https://media.openhandle.dev/s","width":800,"height":90,"startMs":0,"frameCount":2}],"frames":[{"timeMs":0,"sheet":0,"x":0,"y":0},{"timeMs":2000,"sheet":0,"x":160,"y":0}]}}"#,
+        )
+    })
+    .await;
+
+    let storyboard = client(&server)
+        .youtube()
+        .post("dQw4w9WgXcQ")
+        .storyboard()
+        .get(None)
+        .await
+        .expect("post storyboard");
+
+    assert_eq!(
+        server.requests()[0].path,
+        "/v1/youtube/posts/dQw4w9WgXcQ/storyboard"
+    );
+    assert_eq!(storyboard.data.sheets.len(), 1);
+    assert_eq!(storyboard.data.frames[1].x, 160);
+}
+
+#[tokio::test]
+async fn post_frame_sends_the_moment_in_seconds() {
+    let server = MockServer::start(|_, _| {
+        MockResponse::json(
+            r#"{"platform":"youtube","resource":"frame","data":{"postId":"dQw4w9WgXcQ","at":43,"renditions":[{"quality":"1080p","height":1080,"url":"https://media.openhandle.dev/f"}]}}"#,
+        )
+    })
+    .await;
+
+    let frame = client(&server)
+        .youtube()
+        .post("dQw4w9WgXcQ")
+        .frame()
+        .get(YouTubePostFrameOptions::new(43))
+        .await
+        .expect("post frame");
+
+    let request = &server.requests()[0];
+    assert_eq!(request.path, "/v1/youtube/posts/dQw4w9WgXcQ/frame");
+    assert!(request.query.contains(&("at".to_owned(), "43".to_owned())));
+    assert_eq!(frame.data.at, 43);
+    assert_eq!(frame.data.renditions[0].quality.as_deref(), Some("1080p"));
 }
