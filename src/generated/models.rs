@@ -8308,6 +8308,64 @@ pub struct YouTubeExtractedHandle {
     pub platform: Option<String>,
 }
 
+/// The `YouTubeFileRendition` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeFileRendition {
+    /// The `audioLanguage` field.
+    #[serde(rename = "audioLanguage")]
+    pub audio_language: Option<String>,
+    /// The `audioQuality` field.
+    #[serde(rename = "audioQuality")]
+    pub audio_quality: Option<String>,
+    /// The `bitrate` field.
+    pub bitrate: Option<i64>,
+    /// The `codecs` field.
+    pub codecs: Option<String>,
+    /// The `fps` field.
+    pub fps: Option<i64>,
+    /// The `hasAudio` field.
+    #[serde(rename = "hasAudio", deserialize_with = "crate::de::null_as_default")]
+    pub has_audio: bool,
+    /// The `hasVideo` field.
+    #[serde(rename = "hasVideo", deserialize_with = "crate::de::null_as_default")]
+    pub has_video: bool,
+    /// The `height` field.
+    pub height: Option<i64>,
+    /// The `itag` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub itag: i64,
+    /// The `mimeType` field.
+    #[serde(rename = "mimeType")]
+    pub mime_type: Option<String>,
+    /// The `quality` field.
+    pub quality: Option<String>,
+    /// The `size` field.
+    pub size: Option<i64>,
+    /// The `url` field.
+    pub url: Option<String>,
+    /// The `width` field.
+    pub width: Option<i64>,
+}
+
+/// The `YouTubeFiles` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct YouTubeFiles {
+    /// The `author` field.
+    pub author: Option<Box<YouTubeAuthor>>,
+    /// The `duration` field.
+    pub duration: Option<i64>,
+    /// The `postId` field.
+    #[serde(rename = "postId", deserialize_with = "crate::de::null_as_default")]
+    pub post_id: String,
+    /// The `renditions` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub renditions: Vec<YouTubeFileRendition>,
+}
+
 /// The `YouTubeHashtag` model.
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[serde(default)]

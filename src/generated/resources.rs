@@ -6278,6 +6278,13 @@ impl YouTubePostResource {
         }
     }
 
+    /// Selects the files resources. This never sends a request.
+    pub fn files(&self) -> YouTubePostFilesResource {
+        YouTubePostFilesResource {
+            scope: self.scope.clone(),
+        }
+    }
+
     /// Selects the related resources. This never sends a request.
     pub fn related(&self) -> YouTubePostRelatedResource {
         YouTubePostRelatedResource {
@@ -6426,6 +6433,40 @@ impl YouTubePostCommentsResource {
             options.query(),
             options.request_options,
         ))
+    }
+}
+
+/// The `youtube.post.files` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct YouTubePostFilesResource {
+    scope: Scope,
+}
+
+impl YouTubePostFilesResource {
+    /// Get post files.
+    ///
+    /// Return the video and audio streams of a public YouTube video as download links.
+    /// Openhandle refreshes the links, so they keep working. Test and Live use the same
+    /// route, parameters, response schema, pagination, and errors. In Test, null means
+    /// unavailable, not zero.
+    ///
+    /// `GET /v1/youtube/posts/{identifier}/files`
+    pub async fn get(
+        &self,
+        options: impl Into<Option<YouTubePostFilesOptions>>,
+    ) -> Result<YouTubePostFilesResponse, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/youtube/posts/{identifier}/files",
+                options.query(),
+                options.request_options,
+            )?
+            .send()
+            .await
     }
 }
 
@@ -10838,8 +10879,8 @@ pub struct TestDataOptions {
     pub platform: Option<crate::options::Platform>,
     /// Provider-specific public-data filter for this operation. One of `profile`,
     /// `post`, `comment`, `hashtag`, `location`, `music`, `category`, `list`, `entity`,
-    /// `subreddit`, `rule`, `wiki`, `trophy`, `playlist`, `transcript`, `product`, or
-    /// `chart`.
+    /// `subreddit`, `rule`, `wiki`, `trophy`, `playlist`, `transcript`, `product`,
+    /// `chart`, or `files`.
     pub resource: Option<String>,
     /// Provider-specific public-data filter for this operation.
     pub operation: Option<String>,
@@ -10871,8 +10912,8 @@ impl TestDataOptions {
 
     /// Provider-specific public-data filter for this operation. One of `profile`,
     /// `post`, `comment`, `hashtag`, `location`, `music`, `category`, `list`, `entity`,
-    /// `subreddit`, `rule`, `wiki`, `trophy`, `playlist`, `transcript`, `product`, or
-    /// `chart`.
+    /// `subreddit`, `rule`, `wiki`, `trophy`, `playlist`, `transcript`, `product`,
+    /// `chart`, or `files`.
     pub fn resource(mut self, value: impl Into<String>) -> Self {
         self.resource = Some(value.into());
         self
@@ -13830,6 +13871,50 @@ impl YouTubePostCommentsOptions {
 
 /// One page returned by `youtube.post.comments.list`.
 pub type YouTubePostCommentsPage = Page<YouTubeComment>;
+
+/// Options for `youtube.post.files.get`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct YouTubePostFilesOptions {
+    /// Maximum accepted data age. The default is 24h.
+    pub freshness: Option<crate::options::Freshness>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl YouTubePostFilesOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Maximum accepted data age. The default is 24h.
+    pub fn freshness(mut self, value: crate::options::Freshness) -> Self {
+        self.freshness = Some(value);
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("freshness", &self.freshness);
+        Ok(query)
+    }
+}
+
+/// Typed result of `youtube.post.files.get`.
+pub type YouTubePostFilesResponse = Response<YouTubeFiles>;
 
 /// Options for `youtube.post.related.list`.
 #[derive(Clone, Debug, Default, PartialEq)]
