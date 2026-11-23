@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.2.11](https://github.com/openhandlehq/openhandle-rust/compare/v1.2.10...v1.2.11) (2026-11-23)
+
+
+### Features
+
+* sync API contract ([49686fe](https://github.com/openhandlehq/openhandle-rust/commit/49686fe606f8c8fde536418a97d1eeec97eb344a))
+* sync SDK source ([5cd303d](https://github.com/openhandlehq/openhandle-rust/commit/5cd303df54ca0446e1ed3bb83f7f986422160289))
+
 ## [1.2.10](https://github.com/openhandlehq/openhandle-rust/compare/v1.2.9...v1.2.10) (2026-11-17)
 
 
