@@ -1260,6 +1260,12 @@ pub(crate) async fn call_every_operation(
         .map(|_| ()),
     ));
     results.push((
+        "webhookEvents.list",
+        Box::pin(client.webhook_events().list(None))
+            .await
+            .map(|_| ()),
+    ));
+    results.push((
         "youtube.charts.artists.list",
         Box::pin(client.youtube().charts().artists().list(None))
             .await

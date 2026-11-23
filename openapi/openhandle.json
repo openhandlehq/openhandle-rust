@@ -22202,6 +22202,75 @@
         ],
         "type": "object"
       },
+      "WebhookEvent": {
+        "additionalProperties": false,
+        "properties": {
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/WebhookProfileBlockedData"
+          },
+          "environment": {
+            "enum": [
+              "live",
+              "test"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "profile.blocked"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "environment",
+          "createdAt",
+          "data"
+        ],
+        "type": "object"
+      },
+      "WebhookProfileBlockedData": {
+        "additionalProperties": false,
+        "properties": {
+          "blockedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "handle": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "platform": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "platformId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "platform",
+          "platformId",
+          "handle",
+          "blockedAt"
+        ],
+        "type": "object"
+      },
       "YouTubeAudioTrack": {
         "additionalProperties": false,
         "properties": {
@@ -24268,7 +24337,7 @@
   "info": {
     "description": "Read public social data through one API contract. API keys starting with oh_test_ use the deterministic synthetic dataset and record a $0.000 actual charge. Keys starting with oh_live_, plus legacy oh_ keys, use real public data and normal billing. Do not send an environment parameter or header.",
     "title": "Openhandle API",
-    "version": "1.2.10"
+    "version": "1.2.11"
   },
   "openapi": "3.1.0",
   "paths": {
@@ -134823,6 +134892,160 @@
           "paginated": false,
           "path": "fetch",
           "scope": []
+        }
+      }
+    },
+    "/v1/webhook-events": {
+      "get": {
+        "description": "Every event of this workspace, oldest first: the same events a webhook pushes. A live key reads live events and a test key reads test events. Not billed.",
+        "operationId": "listWebhookEvents",
+        "parameters": [
+          {
+            "description": "Return events created at or after this RFC 3339 timestamp.",
+            "in": "query",
+            "name": "since",
+            "required": false,
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Return only events of this type.",
+            "in": "query",
+            "name": "type",
+            "required": false,
+            "schema": {
+              "enum": [
+                "profile.blocked"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Opaque cursor returned by the previous page.",
+            "in": "query",
+            "name": "cursor",
+            "required": false,
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "description": "Maximum number of events to return.",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "data": {
+                          "items": {
+                            "$ref": "#/components/schemas/WebhookEvent"
+                          },
+                          "type": "array"
+                        },
+                        "meta": {
+                          "additionalProperties": false,
+                          "properties": {
+                            "cursors": {
+                              "additionalProperties": false,
+                              "properties": {
+                                "next": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "next"
+                              ],
+                              "type": "object"
+                            }
+                          },
+                          "required": [
+                            "cursors"
+                          ],
+                          "type": "object"
+                        }
+                      },
+                      "required": [
+                        "data",
+                        "meta"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "One page of events."
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "The locator, cursor, or query is invalid."
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "The API key is invalid."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            },
+            "description": "The request rate limit was exceeded."
+          }
+        },
+        "security": [
+          {
+            "OpenhandleKey": []
+          }
+        ],
+        "summary": "List the webhook events of this workspace",
+        "tags": [
+          "Webhooks"
+        ],
+        "x-openhandle-sdk": {
+          "operation": "list",
+          "paginated": true,
+          "path": "webhookEvents.list",
+          "scope": [
+            {
+              "name": "webhookEvents"
+            }
+          ]
         }
       }
     },
