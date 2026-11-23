@@ -209,6 +209,32 @@ The client retries retryable failures twice by default. It follows
 `Retry-After`, waits longer after each try with some random spread, and stops
 at the timeout. Drop the future to cancel a request.
 
+## Verify webhooks
+
+Openhandle signs every webhook it pushes. Pass the raw body, the headers, and
+the endpoint's signing secret to `webhooks::verify`. It returns the typed
+`WebhookEvent`, sends no request, and needs no API key:
+
+```rust
+use openhandle::webhooks::{self, VerifyOptions, WebhookErrorCode};
+
+match webhooks::verify(&body, &headers, &secret, VerifyOptions::new()) {
+    Ok(event) => println!("{} {}", event.r#type, event.data.platform),
+    Err(error) if error.code() == WebhookErrorCode::TimestampOutOfTolerance => {
+        eprintln!("stale webhook");
+    }
+    Err(error) => eprintln!("{error}"),
+}
+```
+
+`body` is the request body as bytes. Do not parse and serialize it before you
+verify it. `headers` is a `reqwest::header::HeaderMap`, the same `http` type
+that axum and hyper use. Branch on `error.code()`: `MissingSignature`,
+`MissingTimestamp`, `InvalidTimestamp`, `TimestampOutOfTolerance`,
+`InvalidSignature`, or `InvalidPayload`. `code().as_str()` gives the shared
+code, such as `invalid_signature`. The timestamp may differ from the current
+time by 300 seconds. Change it with `VerifyOptions::new().tolerance(...)`.
+
 ## Configuration
 
 ```rust

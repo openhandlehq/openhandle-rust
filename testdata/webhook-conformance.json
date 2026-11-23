@@ -1,0 +1,332 @@
+{
+  "version": 1,
+  "secret": "whsec_conformance_3f9a1c7e5b2d4e6f8a0b1c2d3e4f5a6b",
+  "defaultToleranceSeconds": 300,
+  "cases": [
+    {
+      "name": "valid live event",
+      "body": "{\"id\":\"826107ab-cbf7-4937-bd7b-f31c08be3283\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"instagram\",\"platformId\":\"55501234\",\"handle\":\"walkthrough_owner\",\"blockedAt\":\"2026-11-23T11:59:57Z\"}}",
+      "headers": {
+        "X-Openhandle-Timestamp": "1795521600",
+        "X-Openhandle-Signature": "sha256=c3ea2bcb7dcb8778ab230f391272a89275bc6ca52075dd1482aaeec26f4f99ca"
+      },
+      "now": 1795521602,
+      "event": {
+        "id": "826107ab-cbf7-4937-bd7b-f31c08be3283",
+        "type": "profile.blocked",
+        "environment": "live",
+        "createdAt": "2026-11-23T11:59:58Z",
+        "data": {
+          "platform": "instagram",
+          "platformId": "55501234",
+          "handle": "walkthrough_owner",
+          "blockedAt": "2026-11-23T11:59:57Z"
+        }
+      }
+    },
+    {
+      "name": "valid test event with lower-case header names",
+      "body": "{\"id\":\"e0e89e15-8f6a-4e75-b685-c6e59278b1bf\",\"type\":\"profile.blocked\",\"environment\":\"test\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"instagram\",\"platformId\":\"910000000001\",\"handle\":\"northstar_forge_test\",\"blockedAt\":\"2026-11-23T11:59:58Z\"}}",
+      "headers": {
+        "x-openhandle-timestamp": "1795521600",
+        "x-openhandle-signature": "sha256=d0600c174ac19ef9fc3775d0bb12d82e0a5dc80628706f16402d2a14122f715e"
+      },
+      "now": 1795521600,
+      "event": {
+        "id": "e0e89e15-8f6a-4e75-b685-c6e59278b1bf",
+        "type": "profile.blocked",
+        "environment": "test",
+        "createdAt": "2026-11-23T11:59:58Z",
+        "data": {
+          "platform": "instagram",
+          "platformId": "910000000001",
+          "handle": "northstar_forge_test",
+          "blockedAt": "2026-11-23T11:59:58Z"
+        }
+      }
+    },
+    {
+      "name": "pretty-printed body is verified as raw bytes",
+      "body": "{\n  \"id\": \"4b6f0c1e-2f55-4f0e-9d0e-6a1d2b3c4d5e\",\n  \"type\": \"profile.blocked\",\n  \"environment\": \"live\",\n  \"createdAt\": \"2026-11-23T11:59:58Z\",\n  \"data\": {\"platform\": \"tiktok\", \"platformId\": \"6800000000000000001\", \"handle\": null, \"blockedAt\": \"2026-11-23T11:59:00Z\"}\n}",
+      "headers": {
+        "X-Openhandle-Timestamp": "1795521600",
+        "X-Openhandle-Signature": "sha256=82212d33cdf02281e7feb8125cc66dd1e703ff48612aac0794b32c7aecbbe22d"
+      },
+      "now": 1795521600,
+      "event": {
+        "id": "4b6f0c1e-2f55-4f0e-9d0e-6a1d2b3c4d5e",
+        "type": "profile.blocked",
+        "environment": "live",
+        "createdAt": "2026-11-23T11:59:58Z",
+        "data": {
+          "platform": "tiktok",
+          "platformId": "6800000000000000001",
+          "handle": null,
+          "blockedAt": "2026-11-23T11:59:00Z"
+        }
+      }
+    },
+    {
+      "name": "non-ASCII body is verified as UTF-8 bytes",
+      "body": "{\"id\":\"9a8b7c6d-5e4f-4a3b-8c2d-1e0f9a8b7c6d\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"twitter\",\"platformId\":null,\"handle\":\"zoë_ü\",\"blockedAt\":\"2026-11-23T11:59:00Z\"}}",
+      "headers": {
+        "X-Openhandle-Timestamp": "1795521600",
+        "X-Openhandle-Signature": "sha256=aa01f1737b6f81c3bd4ca5d478442fc236db3e33a57ed0a42e3de5b323291f00"
+      },
+      "now": 1795521600,
+      "event": {
+        "id": "9a8b7c6d-5e4f-4a3b-8c2d-1e0f9a8b7c6d",
+        "type": "profile.blocked",
+        "environment": "live",
+        "createdAt": "2026-11-23T11:59:58Z",
+        "data": {
+          "platform": "twitter",
+          "platformId": null,
+          "handle": "zoë_ü",
+          "blockedAt": "2026-11-23T11:59:00Z"
+        }
+      }
+    },
+    {
+      "name": "timestamp exactly at the default tolerance",
+      "body": "{\"id\":\"826107ab-cbf7-4937-bd7b-f31c08be3283\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"instagram\",\"platformId\":\"55501234\",\"handle\":\"walkthrough_owner\",\"blockedAt\":\"2026-11-23T11:59:57Z\"}}",
+      "headers": {
+        "X-Openhandle-Timestamp": "1795521600",
+        "X-Openhandle-Signature": "sha256=c3ea2bcb7dcb8778ab230f391272a89275bc6ca52075dd1482aaeec26f4f99ca"
+      },
+      "now": 1795521900,
+      "event": {
+        "id": "826107ab-cbf7-4937-bd7b-f31c08be3283",
+        "type": "profile.blocked",
+        "environment": "live",
+        "createdAt": "2026-11-23T11:59:58Z",
+        "data": {
+          "platform": "instagram",
+          "platformId": "55501234",
+          "handle": "walkthrough_owner",
+          "blockedAt": "2026-11-23T11:59:57Z"
+        }
+      }
+    },
+    {
+      "name": "timestamp inside a custom tolerance",
+      "body": "{\"id\":\"826107ab-cbf7-4937-bd7b-f31c08be3283\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"instagram\",\"platformId\":\"55501234\",\"handle\":\"walkthrough_owner\",\"blockedAt\":\"2026-11-23T11:59:57Z\"}}",
+      "headers": {
+        "X-Openhandle-Timestamp": "1795521600",
+        "X-Openhandle-Signature": "sha256=c3ea2bcb7dcb8778ab230f391272a89275bc6ca52075dd1482aaeec26f4f99ca"
+      },
+      "now": 1795522100,
+      "toleranceSeconds": 600,
+      "event": {
+        "id": "826107ab-cbf7-4937-bd7b-f31c08be3283",
+        "type": "profile.blocked",
+        "environment": "live",
+        "createdAt": "2026-11-23T11:59:58Z",
+        "data": {
+          "platform": "instagram",
+          "platformId": "55501234",
+          "handle": "walkthrough_owner",
+          "blockedAt": "2026-11-23T11:59:57Z"
+        }
+      }
+    },
+    {
+      "name": "missing signature header",
+      "body": "{\"id\":\"826107ab-cbf7-4937-bd7b-f31c08be3283\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"instagram\",\"platformId\":\"55501234\",\"handle\":\"walkthrough_owner\",\"blockedAt\":\"2026-11-23T11:59:57Z\"}}",
+      "headers": {
+        "X-Openhandle-Timestamp": "1795521600"
+      },
+      "now": 1795521600,
+      "error": "missing_signature"
+    },
+    {
+      "name": "missing timestamp header",
+      "body": "{\"id\":\"826107ab-cbf7-4937-bd7b-f31c08be3283\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"instagram\",\"platformId\":\"55501234\",\"handle\":\"walkthrough_owner\",\"blockedAt\":\"2026-11-23T11:59:57Z\"}}",
+      "headers": {
+        "X-Openhandle-Signature": "sha256=c3ea2bcb7dcb8778ab230f391272a89275bc6ca52075dd1482aaeec26f4f99ca"
+      },
+      "now": 1795521600,
+      "error": "missing_timestamp"
+    },
+    {
+      "name": "timestamp is not an integer",
+      "body": "{\"id\":\"826107ab-cbf7-4937-bd7b-f31c08be3283\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"instagram\",\"platformId\":\"55501234\",\"handle\":\"walkthrough_owner\",\"blockedAt\":\"2026-11-23T11:59:57Z\"}}",
+      "headers": {
+        "X-Openhandle-Timestamp": "12.5",
+        "X-Openhandle-Signature": "sha256=9e75600d07f78ea2b70e3aec3012ed5eb0b9aa1f463727952b4d477b64cb2808"
+      },
+      "now": 1795521600,
+      "error": "invalid_timestamp"
+    },
+    {
+      "name": "timestamp is not a number",
+      "body": "{\"id\":\"826107ab-cbf7-4937-bd7b-f31c08be3283\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"instagram\",\"platformId\":\"55501234\",\"handle\":\"walkthrough_owner\",\"blockedAt\":\"2026-11-23T11:59:57Z\"}}",
+      "headers": {
+        "X-Openhandle-Timestamp": "yesterday",
+        "X-Openhandle-Signature": "sha256=189721bf40e18001a2b781f0ec792ff63029b63f6d36c55a64b33894f30b871d"
+      },
+      "now": 1795521600,
+      "error": "invalid_timestamp"
+    },
+    {
+      "name": "timestamp older than the default tolerance",
+      "body": "{\"id\":\"826107ab-cbf7-4937-bd7b-f31c08be3283\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"instagram\",\"platformId\":\"55501234\",\"handle\":\"walkthrough_owner\",\"blockedAt\":\"2026-11-23T11:59:57Z\"}}",
+      "headers": {
+        "X-Openhandle-Timestamp": "1795521600",
+        "X-Openhandle-Signature": "sha256=c3ea2bcb7dcb8778ab230f391272a89275bc6ca52075dd1482aaeec26f4f99ca"
+      },
+      "now": 1795521901,
+      "error": "timestamp_out_of_tolerance"
+    },
+    {
+      "name": "timestamp further in the future than the tolerance",
+      "body": "{\"id\":\"826107ab-cbf7-4937-bd7b-f31c08be3283\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"instagram\",\"platformId\":\"55501234\",\"handle\":\"walkthrough_owner\",\"blockedAt\":\"2026-11-23T11:59:57Z\"}}",
+      "headers": {
+        "X-Openhandle-Timestamp": "1795521600",
+        "X-Openhandle-Signature": "sha256=c3ea2bcb7dcb8778ab230f391272a89275bc6ca52075dd1482aaeec26f4f99ca"
+      },
+      "now": 1795521299,
+      "error": "timestamp_out_of_tolerance"
+    },
+    {
+      "name": "body changed after signing",
+      "body": "{\"id\":\"826107ab-cbf7-4937-bd7b-f31c08be3283\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"instagram\",\"platformId\":\"55501235\",\"handle\":\"walkthrough_owner\",\"blockedAt\":\"2026-11-23T11:59:57Z\"}}",
+      "headers": {
+        "X-Openhandle-Timestamp": "1795521600",
+        "X-Openhandle-Signature": "sha256=c3ea2bcb7dcb8778ab230f391272a89275bc6ca52075dd1482aaeec26f4f99ca"
+      },
+      "now": 1795521600,
+      "error": "invalid_signature"
+    },
+    {
+      "name": "timestamp changed after signing",
+      "body": "{\"id\":\"826107ab-cbf7-4937-bd7b-f31c08be3283\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"instagram\",\"platformId\":\"55501234\",\"handle\":\"walkthrough_owner\",\"blockedAt\":\"2026-11-23T11:59:57Z\"}}",
+      "headers": {
+        "X-Openhandle-Timestamp": "1795521601",
+        "X-Openhandle-Signature": "sha256=c3ea2bcb7dcb8778ab230f391272a89275bc6ca52075dd1482aaeec26f4f99ca"
+      },
+      "now": 1795521600,
+      "error": "invalid_signature"
+    },
+    {
+      "name": "signed with another secret",
+      "body": "{\"id\":\"826107ab-cbf7-4937-bd7b-f31c08be3283\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"instagram\",\"platformId\":\"55501234\",\"handle\":\"walkthrough_owner\",\"blockedAt\":\"2026-11-23T11:59:57Z\"}}",
+      "headers": {
+        "X-Openhandle-Timestamp": "1795521600",
+        "X-Openhandle-Signature": "sha256=599c7a103968bb6f3a210e621f6bbd1b7d714772d399088a55b2f25e415a9b76"
+      },
+      "now": 1795521600,
+      "error": "invalid_signature"
+    },
+    {
+      "name": "signature without the sha256= prefix",
+      "body": "{\"id\":\"826107ab-cbf7-4937-bd7b-f31c08be3283\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"instagram\",\"platformId\":\"55501234\",\"handle\":\"walkthrough_owner\",\"blockedAt\":\"2026-11-23T11:59:57Z\"}}",
+      "headers": {
+        "X-Openhandle-Timestamp": "1795521600",
+        "X-Openhandle-Signature": "c3ea2bcb7dcb8778ab230f391272a89275bc6ca52075dd1482aaeec26f4f99ca"
+      },
+      "now": 1795521600,
+      "error": "invalid_signature"
+    },
+    {
+      "name": "signature in upper-case hex",
+      "body": "{\"id\":\"826107ab-cbf7-4937-bd7b-f31c08be3283\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"instagram\",\"platformId\":\"55501234\",\"handle\":\"walkthrough_owner\",\"blockedAt\":\"2026-11-23T11:59:57Z\"}}",
+      "headers": {
+        "X-Openhandle-Timestamp": "1795521600",
+        "X-Openhandle-Signature": "sha256=C3EA2BCB7DCB8778AB230F391272A89275BC6CA52075DD1482AAEEC26F4F99CA"
+      },
+      "now": 1795521600,
+      "error": "invalid_signature"
+    },
+    {
+      "name": "re-serialized body does not verify",
+      "body": "{\"id\": \"826107ab-cbf7-4937-bd7b-f31c08be3283\", \"type\": \"profile.blocked\", \"environment\": \"live\", \"createdAt\": \"2026-11-23T11:59:58Z\", \"data\": {\"platform\": \"instagram\", \"platformId\": \"55501234\", \"handle\": \"walkthrough_owner\", \"blockedAt\": \"2026-11-23T11:59:57Z\"}}",
+      "headers": {
+        "X-Openhandle-Timestamp": "1795521600",
+        "X-Openhandle-Signature": "sha256=c3ea2bcb7dcb8778ab230f391272a89275bc6ca52075dd1482aaeec26f4f99ca"
+      },
+      "now": 1795521600,
+      "error": "invalid_signature"
+    },
+    {
+      "name": "timestamp with a plus sign",
+      "body": "{\"id\":\"826107ab-cbf7-4937-bd7b-f31c08be3283\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"instagram\",\"platformId\":\"55501234\",\"handle\":\"walkthrough_owner\",\"blockedAt\":\"2026-11-23T11:59:57Z\"}}",
+      "headers": {
+        "X-Openhandle-Timestamp": "+1795521600",
+        "X-Openhandle-Signature": "sha256=05888212d1ad5a6f493d872bf2377a9d0bfa89b65a99f8bd6b9fcfcf5daa16b9"
+      },
+      "now": 1795521600,
+      "error": "invalid_timestamp"
+    },
+    {
+      "name": "negative timestamp",
+      "body": "{\"id\":\"826107ab-cbf7-4937-bd7b-f31c08be3283\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"instagram\",\"platformId\":\"55501234\",\"handle\":\"walkthrough_owner\",\"blockedAt\":\"2026-11-23T11:59:57Z\"}}",
+      "headers": {
+        "X-Openhandle-Timestamp": "-1795521600",
+        "X-Openhandle-Signature": "sha256=f530948493736d60297823242a8d2617ea49b1219e750558108b9dd584a5e9ab"
+      },
+      "now": 1795521600,
+      "error": "invalid_timestamp"
+    },
+    {
+      "name": "empty signature header",
+      "body": "{\"id\":\"826107ab-cbf7-4937-bd7b-f31c08be3283\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"instagram\",\"platformId\":\"55501234\",\"handle\":\"walkthrough_owner\",\"blockedAt\":\"2026-11-23T11:59:57Z\"}}",
+      "headers": {
+        "X-Openhandle-Timestamp": "1795521600",
+        "X-Openhandle-Signature": ""
+      },
+      "now": 1795521600,
+      "error": "missing_signature"
+    },
+    {
+      "name": "empty timestamp header",
+      "body": "{\"id\":\"826107ab-cbf7-4937-bd7b-f31c08be3283\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"instagram\",\"platformId\":\"55501234\",\"handle\":\"walkthrough_owner\",\"blockedAt\":\"2026-11-23T11:59:57Z\"}}",
+      "headers": {
+        "X-Openhandle-Timestamp": "",
+        "X-Openhandle-Signature": "sha256=65adf07dc3209f3d73a80e89d9bd1372d181d32a10c7d7080f354eecaf99145b"
+      },
+      "now": 1795521600,
+      "error": "missing_timestamp"
+    },
+    {
+      "name": "valid signature over JSON that is not an object",
+      "body": "[{\"id\":\"826107ab-cbf7-4937-bd7b-f31c08be3283\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\",\"data\":{\"platform\":\"instagram\",\"platformId\":\"55501234\",\"handle\":\"walkthrough_owner\",\"blockedAt\":\"2026-11-23T11:59:57Z\"}}]",
+      "headers": {
+        "X-Openhandle-Timestamp": "1795521600",
+        "X-Openhandle-Signature": "sha256=ff3aedc1f1428dd2fd719891df2cb461bc6309c3dc7d0d49ed0d332d6aa316ba"
+      },
+      "now": 1795521600,
+      "error": "invalid_payload"
+    },
+    {
+      "name": "valid signature over an object that is not an event",
+      "body": "{}",
+      "headers": {
+        "X-Openhandle-Timestamp": "1795521600",
+        "X-Openhandle-Signature": "sha256=16a659242002120e0de3ef1ae8baa4df6e496612d5900d9f5555d5a58d6b707a"
+      },
+      "now": 1795521600,
+      "error": "invalid_payload"
+    },
+    {
+      "name": "valid signature over an event without data",
+      "body": "{\"id\":\"826107ab-cbf7-4937-bd7b-f31c08be3283\",\"type\":\"profile.blocked\",\"environment\":\"live\",\"createdAt\":\"2026-11-23T11:59:58Z\"}",
+      "headers": {
+        "X-Openhandle-Timestamp": "1795521600",
+        "X-Openhandle-Signature": "sha256=08688848e84a6fe35d6012ae4a6d643f7fe4cfbe4b7b3c365ee49066a34d3c63"
+      },
+      "now": 1795521600,
+      "error": "invalid_payload"
+    },
+    {
+      "name": "valid signature over a body that is not JSON",
+      "body": "not json",
+      "headers": {
+        "X-Openhandle-Timestamp": "1795521600",
+        "X-Openhandle-Signature": "sha256=9e716bcc5b4d96f85236a713255780de40ebe9c736ddd9b8a00c557bded7fdb3"
+      },
+      "now": 1795521600,
+      "error": "invalid_payload"
+    }
+  ]
+}

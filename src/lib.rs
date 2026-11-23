@@ -38,6 +38,7 @@ mod options;
 mod references;
 mod response;
 mod transport;
+pub mod webhooks;
 
 #[cfg(test)]
 mod surface_tests;

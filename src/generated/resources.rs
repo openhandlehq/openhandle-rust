@@ -51,6 +51,13 @@ impl Client {
         }
     }
 
+    /// Selects the webhook events resources. This never sends a request.
+    pub fn webhook_events(&self) -> WebhookEventsResource {
+        WebhookEventsResource {
+            scope: Scope::new(self.clone()),
+        }
+    }
+
     /// Selects the YouTube resources. This never sends a request.
     pub fn youtube(&self) -> YouTubeResource {
         YouTubeResource {
@@ -5781,6 +5788,49 @@ impl TwitterSearchUsersResource {
         Items::new(self.scope.operation(
             Method::GET,
             "/v1/twitter/search/users",
+            options.query(),
+            options.request_options,
+        ))
+    }
+}
+
+/// The `webhookEvents` resources.
+///
+/// Selecting a resource never sends a request. Only its terminal operations do.
+#[derive(Clone, Debug)]
+pub struct WebhookEventsResource {
+    scope: Scope,
+}
+
+impl WebhookEventsResource {
+    /// List the webhook events of this workspace.
+    ///
+    /// Every event of this workspace, oldest first: the same events a webhook pushes. A
+    /// live key reads live events and a test key reads test events. Not billed.
+    ///
+    /// `GET /v1/webhook-events`
+    pub async fn list(
+        &self,
+        options: impl Into<Option<WebhookEventsOptions>>,
+    ) -> Result<WebhookEventsPage, Error> {
+        let options = options.into().unwrap_or_default();
+        self.scope
+            .operation(
+                Method::GET,
+                "/v1/webhook-events",
+                options.query(),
+                options.request_options,
+            )?
+            .send_page()
+            .await
+    }
+
+    /// Iterates lazily over every item of [`list`](Self::list), one page per request.
+    pub fn items(&self, options: impl Into<Option<WebhookEventsOptions>>) -> Items<WebhookEvent> {
+        let options = options.into().unwrap_or_default();
+        Items::new(self.scope.operation(
+            Method::GET,
+            "/v1/webhook-events",
             options.query(),
             options.request_options,
         ))
@@ -13409,6 +13459,77 @@ impl TwitterSearchUsersOptions {
 
 /// One page returned by `twitter.search.users.list`.
 pub type TwitterSearchUsersPage = Page<TwitterProfile>;
+
+/// Options for `webhookEvents.list`.
+#[derive(Clone, Debug, Default, PartialEq)]
+#[non_exhaustive]
+pub struct WebhookEventsOptions {
+    /// Return events created at or after this RFC 3339 timestamp.
+    pub since: Option<chrono::DateTime<chrono::Utc>>,
+    /// Return only events of this type. One of `profile.blocked`.
+    pub r#type: Option<String>,
+    /// Opaque cursor returned by the previous page.
+    pub cursor: Option<String>,
+    /// Maximum number of events to return. The API default is `50`. Accepts 1 to 100.
+    pub limit: Option<i64>,
+    /// Retry and timeout controls for this request.
+    pub request_options: RequestOptions,
+}
+
+impl WebhookEventsOptions {
+    /// Creates options that use the API and client defaults.
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    /// Return events created at or after this RFC 3339 timestamp.
+    pub fn since(mut self, value: chrono::DateTime<chrono::Utc>) -> Self {
+        self.since = Some(value);
+        self
+    }
+
+    /// Return only events of this type. One of `profile.blocked`.
+    pub fn r#type(mut self, value: impl Into<String>) -> Self {
+        self.r#type = Some(value.into());
+        self
+    }
+
+    /// Opaque cursor returned by the previous page.
+    pub fn cursor(mut self, value: impl Into<String>) -> Self {
+        self.cursor = Some(value.into());
+        self
+    }
+
+    /// Maximum number of events to return. The API default is `50`. Accepts 1 to 100.
+    pub fn limit(mut self, value: i64) -> Self {
+        self.limit = Some(value);
+        self
+    }
+
+    /// Sets the retry attempts after the first request.
+    pub fn max_retries(mut self, value: u32) -> Self {
+        self.request_options.max_retries = Some(value);
+        self
+    }
+
+    /// Sets the timeout for each attempt.
+    pub fn timeout(mut self, value: Duration) -> Self {
+        self.request_options.timeout = Some(value);
+        self
+    }
+
+    pub(crate) fn query(&self) -> Result<Query, Error> {
+        let mut query = Query::default();
+        query.push("since", &self.since);
+        query.push("type", &self.r#type);
+        query.push("cursor", &self.cursor);
+        query.push("limit", &self.limit);
+        Ok(query)
+    }
+}
+
+/// One page returned by `webhookEvents.list`.
+pub type WebhookEventsPage = Page<WebhookEvent>;
 
 /// Options for `youtube.charts.artists.list`.
 #[derive(Clone, Debug, Default, PartialEq)]

@@ -8046,6 +8046,46 @@ pub struct TwitterWithheld {
     pub scope: Option<String>,
 }
 
+/// The `WebhookEvent` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct WebhookEvent {
+    /// The `createdAt` field.
+    #[serde(rename = "createdAt", deserialize_with = "crate::de::null_as_default")]
+    pub created_at: chrono::DateTime<chrono::Utc>,
+    /// The `data` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub data: Box<WebhookProfileBlockedData>,
+    /// The `environment` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub environment: String,
+    /// The `id` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub id: String,
+    /// The `type` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub r#type: String,
+}
+
+/// The `WebhookProfileBlockedData` model.
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+#[serde(default)]
+#[non_exhaustive]
+pub struct WebhookProfileBlockedData {
+    /// The `blockedAt` field.
+    #[serde(rename = "blockedAt", deserialize_with = "crate::de::null_as_default")]
+    pub blocked_at: chrono::DateTime<chrono::Utc>,
+    /// The `handle` field.
+    pub handle: Option<String>,
+    /// The `platform` field.
+    #[serde(deserialize_with = "crate::de::null_as_default")]
+    pub platform: String,
+    /// The `platformId` field.
+    #[serde(rename = "platformId")]
+    pub platform_id: Option<String>,
+}
+
 /// The `YouTubeAudioTrack` model.
 #[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
 #[serde(default)]
